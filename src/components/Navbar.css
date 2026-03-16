@@ -1,0 +1,88 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--bg);
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: var(--border-radius-md);
+  color: var(--text-h);
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: box-shadow var(--transition);
+  user-select: none;
+}
+
+.navbar__logo:hover {
+  box-shadow: var(--neo-btn-hover);
+}
+
+.navbar__logo svg {
+  color: var(--accent);
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-link {
+  padding: 10px 20px;
+  border-radius: var(--border-radius-md);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all var(--transition);
+  box-shadow: var(--neo-tag);
+  background-color: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-link:hover {
+  color: var(--text-h);
+  box-shadow: var(--neo-btn-hover);
+}
+
+.nav-link--active {
+  color: var(--text-h);
+  box-shadow: var(--neo-in);
+}
+
+.nav-link--new {
+  background-color: var(--accent);
+  color: #fff;
+  box-shadow: var(--neo-btn), 0 0 15px var(--accent-glow);
+}
+
+.nav-link--new:hover {
+  background-color: var(--accent-hover);
+  box-shadow: var(--neo-btn-hover), 0 0 20px var(--accent-glow);
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 14px 20px;
+  }
+
+  .navbar__links {
+    gap: 6px;
+  }
+
+  .nav-link {
+    padding: 8px 14px;
+    font-size: 0.82rem;
+  }
+}
