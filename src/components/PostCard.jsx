@@ -16,12 +16,27 @@ const CalendarIcon = () => (
   </svg>
 );
 
+const TrashIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6" />
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+    <line x1="10" y1="11" x2="10" y2="17" />
+    <line x1="14" y1="11" x2="14" y2="17" />
+  </svg>
+);
+
 const MAX_VISIBLE_TAGS = 3;
 
-export default function PostCard({ post }) {
-  const { title, excerpt, tags = [], date } = post;
+export default function PostCard({ post, onDelete }) {
+  const { title, content, tags = [], category, createdAt, id } = post;
   const visibleTags = tags.slice(0, MAX_VISIBLE_TAGS);
   const extraCount = tags.length - MAX_VISIBLE_TAGS;
+
+  const displayDate = createdAt ? new Date(createdAt).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  }) : 'Loading...';
 
   return (
     <article className="post-card neo-out">
@@ -36,10 +51,18 @@ export default function PostCard({ post }) {
         )}
       </div>
       <h2 className="post-card__title">{title}</h2>
-      <p className="post-card__excerpt">{excerpt}</p>
-      <div className="post-card__meta">
-        <CalendarIcon />
-        <time>{date}</time>
+      <p className="post-card__excerpt">{content}</p>
+      <div className="post-card__footer">
+        <div className="post-card__meta">
+          <CalendarIcon />
+          <time>{displayDate}</time>
+        </div>
+        <button className="post-card__delete neo-tag" onClick={(e) => {
+          e.stopPropagation();
+          onDelete(id);
+        }}>
+          <TrashIcon />
+        </button>
       </div>
     </article>
   );

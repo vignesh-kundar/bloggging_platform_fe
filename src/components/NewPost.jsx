@@ -18,11 +18,14 @@ const XIcon = () => (
 export default function NewPost({ onPublish }) {
   const [formData, setFormData] = useState({
     title: '',
-    excerpt: '',
+    category: 'Technology',
     content: ''
   });
   const [tagInput, setTagInput] = useState('');
   const [tags, setTags] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const CATEGORIES = ['Technology', 'Lifestyle', 'Nature', 'Design', 'Innovation', 'Wellness', 'Other'];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,25 +45,24 @@ export default function NewPost({ onPublish }) {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title.trim() || !formData.content.trim()) return;
 
-    const newPost = {
-      ...formData,
-      id: Date.now(),
-      date: new Date().toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      }),
-      tags: tags
-    };
-
-    onPublish(newPost);
-    // Reset form
-    setFormData({ title: '', excerpt: '', content: '' });
-    setTags([]);
+    setIsSubmitting(true);
+    try {
+      await onPublish({
+        ...formData,
+        tags: tags
+      });
+      // Reset form
+      setFormData({ title: '', category: 'Technology', content: '' });
+      setTags([]);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -82,6 +84,21 @@ export default function NewPost({ onPublish }) {
               onChange={handleChange}
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="category">Category</label>
+            <select
+              id="category"
+              name="category"
+              className="neo-in"
+              value={formData.category}
+              onChange={handleChange}
+            >
+              {CATEGORIES.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
           </div>
 
           <div className="form-group">
@@ -133,8 +150,8 @@ export default function NewPost({ onPublish }) {
             ></textarea>
           </div>
 
-          <button type="submit" className="publish-btn">
-            <SendIcon /> Publish Post
+          <button type="submit" className="publish-btn" disabled={isSubmitting}>
+            <SendIcon /> {isSubmitting ? 'Publishing...' : 'Publish Post'}
           </button>
         </form>
       </div>

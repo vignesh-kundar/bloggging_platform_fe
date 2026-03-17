@@ -58,6 +58,17 @@
   font-size: 0.9rem;
 }
 
+.loading-state, .error-state {
+  text-align: center;
+  padding: 60px;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+
+.error-state {
+  color: #ff5f5f;
+}
+
 /* Footer */
 .app__footer {
   text-align: center;

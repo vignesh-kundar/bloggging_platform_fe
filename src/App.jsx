@@ -5,6 +5,8 @@ import Hero from './components/Hero';
 import PostCard from './components/PostCard';
 import About from './components/About';
 import NewPost from './components/NewPost';
+import { api } from './services/api';
+import { useEffect } from 'react';
 
 const BLOG_POSTS = [
   {
@@ -94,24 +96,57 @@ function EmptyState({ query }) {
 export default function App() {
   const [activePage, setActivePage] = useState('home');
   const [searchQuery, setSearchQuery] = useState('');
-  const [posts, setPosts] = useState(BLOG_POSTS);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handlePublish = (newPost) => {
-    setPosts([newPost, ...posts]);
-    setActivePage('home');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = async (term = '') => {
+    try {
+      setLoading(true);
+      const data = await api.getPosts(term);
+      setPosts(data);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError('Could not load posts. Please make sure the backend is running.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const filteredPosts = useMemo(() => {
-    if (!searchQuery.trim()) return posts;
-    const q = searchQuery.toLowerCase();
-    return posts.filter(
-      (p) =>
-        p.title.toLowerCase().includes(q) ||
-        p.excerpt.toLowerCase().includes(q) ||
-        p.tags.some((t) => t.toLowerCase().includes(q))
-    );
-  }, [searchQuery, posts]);
+  const handleSearch = (term) => {
+    setSearchQuery(term);
+    fetchPosts(term);
+  };
+
+  const handlePublish = async (newPostData) => {
+    try {
+      const createdPost = await api.createPost(newPostData);
+      setPosts([createdPost, ...posts]);
+      setActivePage('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      console.error(err);
+      alert('Failed to publish post: ' + err.message);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this post?')) return;
+    try {
+      await api.deletePost(id);
+      setPosts(posts.filter(p => p.id !== id));
+    } catch (err) {
+      console.error(err);
+      alert('Failed to delete post: ' + err.message);
+    }
+  };
+
+  const filteredPosts = posts; // Search is now handled server-side
 
   return (
     <div className="app">
@@ -119,13 +154,17 @@ export default function App() {
       <main className="app__main">
         {activePage === 'home' && (
           <>
-            <Hero onSearch={setSearchQuery} />
-            {filteredPosts.length === 0 ? (
+            <Hero onSearch={handleSearch} />
+            {loading ? (
+              <div className="loading-state">Loading posts...</div>
+            ) : error ? (
+              <div className="error-state">{error}</div>
+            ) : posts.length === 0 ? (
               <EmptyState query={searchQuery} />
             ) : (
               <section className="blog-grid">
-                {filteredPosts.map((post) => (
-                  <PostCard key={post.id} post={post} />
+                {posts.map((post) => (
+                  <PostCard key={post.id} post={post} onDelete={() => handleDelete(post.id)} />
                 ))}
               </section>
             )}

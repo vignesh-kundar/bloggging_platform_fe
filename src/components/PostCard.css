@@ -56,10 +56,19 @@
   line-height: 1.6;
   color: var(--text-primary);
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   opacity: 0.85;
+}
+
+.post-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 12px;
 }
 
 .post-card__meta {
@@ -68,6 +77,26 @@
   gap: 8px;
   font-size: 0.85rem;
   color: var(--text-muted);
-  margin-top: auto;
-  padding-top: 4px;
+}
+
+.post-card__delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: var(--bg-surface);
+  color: var(--text-muted);
+  transition: all var(--transition);
+  opacity: 0;
+}
+
+.post-card:hover .post-card__delete {
+  opacity: 1;
+}
+
+.post-card__delete:hover {
+  color: #ff5f5f;
+  box-shadow: var(--neo-btn-hover);
 }
