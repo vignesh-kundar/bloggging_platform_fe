@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Hero.css';
 
 const SearchIcon = () => (
@@ -10,10 +10,20 @@ const SearchIcon = () => (
 
 export default function Hero({ onSearch }) {
   const [value, setValue] = useState('');
+  const debounceRef = useRef(null);
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      onSearch(value);
+    }, 300);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [value, onSearch]);
 
   const handleChange = (e) => {
     setValue(e.target.value);
-    onSearch(e.target.value);
   };
 
   return (

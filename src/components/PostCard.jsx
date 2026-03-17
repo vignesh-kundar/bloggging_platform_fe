@@ -26,9 +26,10 @@ const TrashIcon = () => (
 );
 
 const MAX_VISIBLE_TAGS = 3;
+const MAX_EXCERPT_LENGTH = 150;
 
 export default function PostCard({ post, onDelete, onClick }) {
-  const { title, content, tags = [], category, createdAt, id } = post;
+  const { title, content, tags = [], createdAt, id } = post;
   const visibleTags = tags.slice(0, MAX_VISIBLE_TAGS);
   const extraCount = tags.length - MAX_VISIBLE_TAGS;
 
@@ -38,11 +39,15 @@ export default function PostCard({ post, onDelete, onClick }) {
     year: 'numeric'
   }) : 'Loading...';
 
+  const excerpt = content?.length > MAX_EXCERPT_LENGTH 
+    ? content.slice(0, MAX_EXCERPT_LENGTH).trim() + '...'
+    : content;
+
   return (
     <article className="post-card neo-out" onClick={onClick}>
       <div className="post-card__tags">
-        {visibleTags.map((tag) => (
-          <span key={tag} className="post-card__tag">
+        {visibleTags.map((tag, index) => (
+          <span key={`${tag}-${index}`} className="post-card__tag">
             <TagIcon /> {tag}
           </span>
         ))}
@@ -51,7 +56,7 @@ export default function PostCard({ post, onDelete, onClick }) {
         )}
       </div>
       <h2 className="post-card__title">{title}</h2>
-      <p className="post-card__excerpt">{content}</p>
+      <p className="post-card__excerpt">{excerpt}</p>
       <div className="post-card__footer">
         <div className="post-card__meta">
           <CalendarIcon />

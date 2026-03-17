@@ -24,7 +24,7 @@ const CalendarIcon = () => (
 );
 
 export default function PostDetail({ post, onBack }) {
-  if (!post) return null;
+  if (!post) return <div className="loading-state">Loading post...</div>;
 
   const { title, content, tags = [], createdAt, updatedAt } = post;
 
@@ -58,8 +58,8 @@ export default function PostDetail({ post, onBack }) {
       <article className="post-detail neo-out">
         <div className="post-detail__header">
           <div className="post-detail__tags">
-            {tags.map((tag) => (
-              <span key={tag} className="post-detail__tag neo-tag">
+            {tags.map((tag, index) => (
+              <span key={`${tag}-${index}`} className="post-detail__tag neo-tag">
                 <TagIcon /> {tag}
               </span>
             ))}
@@ -72,7 +72,7 @@ export default function PostDetail({ post, onBack }) {
         </div>
 
         <div className="post-detail__content">
-          {content.split('\n').map((paragraph, index) => (
+          {content.split('\n').filter(p => p.trim()).map((paragraph, index) => (
             <p key={index}>{paragraph}</p>
           ))}
         </div>
