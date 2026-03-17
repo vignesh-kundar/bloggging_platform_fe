@@ -64,8 +64,50 @@
 }
 
 .form-group input:focus,
+.form-group select:focus,
 .form-group textarea:focus {
   box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.45), inset -3px -3px 8px rgba(255, 255, 255, 0.05), 0 0 0 1px var(--accent);
+}
+
+.select-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group select {
+  padding: 16px 20px;
+  border-radius: var(--border-radius-md);
+  border: none;
+  background-color: var(--bg);
+  color: var(--text-h);
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all var(--transition);
+  appearance: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.select-wrapper::after {
+  content: '';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 6px;
+  background-color: var(--text-muted);
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.form-group select option {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  padding: 12px;
 }
 
 .tag-input-wrapper {

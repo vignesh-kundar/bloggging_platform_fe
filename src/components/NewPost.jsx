@@ -88,17 +88,19 @@ export default function NewPost({ onPublish }) {
 
           <div className="form-group">
             <label htmlFor="category">Category</label>
-            <select
-              id="category"
-              name="category"
-              className="neo-in"
-              value={formData.category}
-              onChange={handleChange}
-            >
-              {CATEGORIES.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
+            <div className="select-wrapper">
+              <select
+                id="category"
+                name="category"
+                className="neo-in"
+                value={formData.category}
+                onChange={handleChange}
+              >
+                {CATEGORIES.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="form-group">
