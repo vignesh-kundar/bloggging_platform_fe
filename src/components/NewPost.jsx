@@ -45,17 +45,16 @@ export default function NewPost({ onPublish }) {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.title.trim() || !formData.content.trim()) return;
 
     setIsSubmitting(true);
     try {
-      await onPublish({
+      onPublish({
         ...formData,
         tags: tags
       });
-      // Reset form
       setFormData({ title: '', category: 'Technology', content: '' });
       setTags([]);
     } catch (err) {
