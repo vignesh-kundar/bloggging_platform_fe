@@ -27,7 +27,7 @@ const TrashIcon = () => (
 
 const MAX_VISIBLE_TAGS = 3;
 
-export default function PostCard({ post, onDelete }) {
+export default function PostCard({ post, onDelete, onClick }) {
   const { title, content, tags = [], category, createdAt, id } = post;
   const visibleTags = tags.slice(0, MAX_VISIBLE_TAGS);
   const extraCount = tags.length - MAX_VISIBLE_TAGS;
@@ -39,7 +39,7 @@ export default function PostCard({ post, onDelete }) {
   }) : 'Loading...';
 
   return (
-    <article className="post-card neo-out">
+    <article className="post-card neo-out" onClick={onClick}>
       <div className="post-card__tags">
         {visibleTags.map((tag) => (
           <span key={tag} className="post-card__tag">

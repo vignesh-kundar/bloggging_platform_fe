@@ -1,12 +1,12 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import PostCard from './components/PostCard';
 import About from './components/About';
 import NewPost from './components/NewPost';
+import PostDetail from './components/PostDetail';
 import { api } from './services/api';
-import { useEffect } from 'react';
 
 const BLOG_POSTS = [
   {
@@ -97,6 +97,7 @@ export default function App() {
   const [activePage, setActivePage] = useState('home');
   const [searchQuery, setSearchQuery] = useState('');
   const [posts, setPosts] = useState([]);
+  const [currentPost, setCurrentPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -146,6 +147,21 @@ export default function App() {
     }
   };
 
+  const handleViewPost = async (id) => {
+    try {
+      setLoading(true);
+      const post = await api.getPostById(id);
+      setCurrentPost(post);
+      setActivePage('post');
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    } catch (err) {
+      console.error(err);
+      alert('Failed to load post details');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const filteredPosts = posts; // Search is now handled server-side
 
   return (
@@ -164,11 +180,20 @@ export default function App() {
             ) : (
               <section className="blog-grid">
                 {posts.map((post) => (
-                  <PostCard key={post.id} post={post} onDelete={() => handleDelete(post.id)} />
+                  <PostCard 
+                    key={post.id} 
+                    post={post} 
+                    onDelete={() => handleDelete(post.id)}
+                    onClick={() => handleViewPost(post.id)}
+                  />
                 ))}
               </section>
             )}
           </>
+        )}
+
+        {activePage === 'post' && (
+          <PostDetail post={currentPost} onBack={() => setActivePage('home')} />
         )}
         
         {activePage === 'new' && (
