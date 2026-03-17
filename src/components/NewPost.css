@@ -1,0 +1,111 @@
+.new-post-container {
+  max-width: 800px;
+  margin: 0 auto 60px;
+  padding: 0 40px;
+  animation: fadeIn 0.6s ease;
+}
+
+.new-post-card {
+  padding: 48px;
+  border-radius: var(--border-radius-xl);
+  background-color: var(--bg-surface);
+}
+
+.new-post__title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-h);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.new-post__subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 40px;
+}
+
+.new-post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-left: 4px;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 16px 20px;
+  border-radius: var(--border-radius-md);
+  border: none;
+  background-color: var(--bg);
+  color: var(--text-h);
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: box-shadow var(--transition);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.45), inset -3px -3px 8px rgba(255, 255, 255, 0.05), 0 0 0 1px var(--accent);
+}
+
+.publish-btn {
+  margin-top: 12px;
+  padding: 16px 32px;
+  border-radius: var(--border-radius-md);
+  background-color: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: var(--neo-btn), 0 0 15px var(--accent-glow);
+  transition: all var(--transition);
+  align-self: flex-start;
+}
+
+.publish-btn:hover {
+  background-color: var(--accent-hover);
+  box-shadow: var(--neo-btn-hover), 0 0 20px var(--accent-glow);
+  transform: translateY(-2px);
+}
+
+.publish-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--neo-in);
+}
+
+@media (max-width: 600px) {
+  .new-post-container {
+    padding: 0 20px;
+  }
+  
+  .new-post-card {
+    padding: 32px 24px;
+  }
+  
+  .publish-btn {
+    align-self: stretch;
+  }
+}

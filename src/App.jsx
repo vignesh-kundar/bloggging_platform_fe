@@ -3,6 +3,8 @@ import './App.css';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import PostCard from './components/PostCard';
+import About from './components/About';
+import NewPost from './components/NewPost';
 
 const BLOG_POSTS = [
   {
@@ -92,31 +94,50 @@ function EmptyState({ query }) {
 export default function App() {
   const [activePage, setActivePage] = useState('home');
   const [searchQuery, setSearchQuery] = useState('');
+  const [posts, setPosts] = useState(BLOG_POSTS);
+
+  const handlePublish = (newPost) => {
+    setPosts([newPost, ...posts]);
+    setActivePage('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const filteredPosts = useMemo(() => {
-    if (!searchQuery.trim()) return BLOG_POSTS;
+    if (!searchQuery.trim()) return posts;
     const q = searchQuery.toLowerCase();
-    return BLOG_POSTS.filter(
+    return posts.filter(
       (p) =>
         p.title.toLowerCase().includes(q) ||
         p.excerpt.toLowerCase().includes(q) ||
         p.tags.some((t) => t.toLowerCase().includes(q))
     );
-  }, [searchQuery]);
+  }, [searchQuery, posts]);
 
   return (
     <div className="app">
       <Navbar activePage={activePage} setActivePage={setActivePage} />
       <main className="app__main">
-        <Hero onSearch={setSearchQuery} />
-        {filteredPosts.length === 0 ? (
-          <EmptyState query={searchQuery} />
-        ) : (
-          <section className="blog-grid">
-            {filteredPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </section>
+        {activePage === 'home' && (
+          <>
+            <Hero onSearch={setSearchQuery} />
+            {filteredPosts.length === 0 ? (
+              <EmptyState query={searchQuery} />
+            ) : (
+              <section className="blog-grid">
+                {filteredPosts.map((post) => (
+                  <PostCard key={post.id} post={post} />
+                ))}
+              </section>
+            )}
+          </>
+        )}
+        
+        {activePage === 'new' && (
+          <NewPost onPublish={handlePublish} />
+        )}
+
+        {activePage === 'about' && (
+          <About />
         )}
       </main>
       <footer className="app__footer">
