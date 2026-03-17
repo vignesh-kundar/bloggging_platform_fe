@@ -1,8 +1,11 @@
-.about-container {
-  max-width: 1000px;
-  margin: 0 auto 60px;
+.about-page {
+  max-width: 1100px;
+  margin: 0 auto 80px;
   padding: 0 40px;
   animation: fadeIn 0.6s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
 @keyframes fadeIn {
@@ -11,15 +14,14 @@
 }
 
 .about-hero {
-  padding: 60px 52px;
+  padding: 80px 52px;
   border-radius: var(--border-radius-xl);
   background-color: var(--bg-surface);
-  margin-bottom: 40px;
   text-align: center;
 }
 
 .about-hero__title {
-  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-size: clamp(2.5rem, 6vw, 3.8rem);
   font-weight: 800;
   color: var(--text-h);
   margin-bottom: 16px;
@@ -27,74 +29,105 @@
 }
 
 .about-hero__subtitle {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--text-muted);
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
+  line-height: 1.6;
 }
 
-.about-content {
+.about-mission, .about-story {
+  padding: 48px 52px;
+  border-radius: var(--border-radius-xl);
+  background-color: var(--bg-surface);
+}
+
+.about-mission__title, .about-story__title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-h);
+  margin-bottom: 24px;
+}
+
+.about-mission__content, .about-story__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-mission__content p, .about-story__content p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  opacity: 0.9;
+}
+
+.about-features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
 }
 
-.about-section {
-  padding: 32px;
-  border-radius: var(--border-radius-lg);
+.feature-card {
+  padding: 40px 32px;
+  border-radius: var(--border-radius-xl);
   background-color: var(--bg-surface);
+  text-align: center;
   transition: transform var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.about-section:hover {
+.feature-card:hover {
   transform: translateY(-5px);
 }
 
-.about-section__title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--text-h);
-  margin-bottom: 16px;
+.feature-card__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background-color: var(--bg);
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  margin-bottom: 24px;
+  color: var(--text-h);
+  padding: 12px;
 }
 
-.about-section__title::before {
-  content: '';
-  display: block;
-  width: 4px;
-  height: 20px;
-  background-color: var(--accent);
-  border-radius: 2px;
+.feature-card__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-h);
+  margin-bottom: 12px;
 }
 
-.about-section__text {
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: var(--text-primary);
+.feature-card__text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-muted);
 }
 
-.about-section__text strong {
-  color: var(--accent);
-}
-
-.about-cta {
-  margin-top: 24px;
-  padding: 16px;
-  border-radius: var(--border-radius-md);
-  background-color: var(--bg);
-  text-align: center;
-  font-weight: 600;
-  color: var(--accent);
+@media (max-width: 992px) {
+  .about-features {
+    grid-template-columns: repeat(1, 1fr);
+    max-width: 500px;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 768px) {
-  .about-container {
+  .about-page {
     padding: 0 20px;
+    margin-bottom: 40px;
   }
   
-  .about-hero {
+  .about-hero, .about-mission, .about-story {
     padding: 40px 24px;
+  }
+  
+  .about-hero__title {
+    font-size: 2.2rem;
   }
 }

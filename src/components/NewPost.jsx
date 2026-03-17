@@ -8,17 +8,38 @@ const SendIcon = () => (
   </svg>
 );
 
+const XIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
+
 export default function NewPost({ onPublish }) {
   const [formData, setFormData] = useState({
     title: '',
     excerpt: '',
-    content: '',
-    tags: ''
+    content: ''
   });
+  const [tagInput, setTagInput] = useState('');
+  const [tags, setTags] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddTag = (e) => {
+    e.preventDefault();
+    const tag = tagInput.trim();
+    if (tag && !tags.includes(tag)) {
+      setTags([...tags, tag]);
+      setTagInput('');
+    }
+  };
+
+  const removeTag = (tagToRemove) => {
+    setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
   const handleSubmit = (e) => {
@@ -33,12 +54,13 @@ export default function NewPost({ onPublish }) {
         day: 'numeric',
         year: 'numeric'
       }),
-      tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
+      tags: tags
     };
 
     onPublish(newPost);
     // Reset form
-    setFormData({ title: '', excerpt: '', content: '', tags: '' });
+    setFormData({ title: '', excerpt: '', content: '' });
+    setTags([]);
   };
 
   return (
@@ -54,7 +76,7 @@ export default function NewPost({ onPublish }) {
               type="text"
               id="title"
               name="title"
-              placeholder="Give your story a title..."
+              placeholder="Enter post title..."
               className="neo-in"
               value={formData.title}
               onChange={handleChange}
@@ -63,29 +85,38 @@ export default function NewPost({ onPublish }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="excerpt">Excerpt</label>
-            <input
-              type="text"
-              id="excerpt"
-              name="excerpt"
-              placeholder="A brief summary of your post..."
-              className="neo-in"
-              value={formData.excerpt}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="tags">Tags (comma separated)</label>
-            <input
-              type="text"
-              id="tags"
-              name="tags"
-              placeholder="Technology, Web, Design..."
-              className="neo-in"
-              value={formData.tags}
-              onChange={handleChange}
-            />
+            <label htmlFor="tags">Tags</label>
+            <div className="tag-input-wrapper">
+              <input
+                type="text"
+                id="tags"
+                placeholder="Add a tag..."
+                className="neo-in"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddTag(e);
+                  }
+                }}
+              />
+              <button type="button" onClick={handleAddTag} className="add-tag-btn neo-out">
+                Add
+              </button>
+            </div>
+            {tags.length > 0 && (
+              <div className="tag-chips">
+                {tags.map(tag => (
+                  <span key={tag} className="tag-chip neo-out">
+                    {tag}
+                    <button type="button" onClick={() => removeTag(tag)} className="remove-tag">
+                      <XIcon />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="form-group">
@@ -93,7 +124,7 @@ export default function NewPost({ onPublish }) {
             <textarea
               id="content"
               name="content"
-              placeholder="Write your story here..."
+              placeholder="Write your post content..."
               className="neo-in"
               rows="12"
               value={formData.content}

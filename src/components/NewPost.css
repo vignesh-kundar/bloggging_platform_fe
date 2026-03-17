@@ -12,7 +12,7 @@
 }
 
 .new-post__title {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 800;
   color: var(--text-h);
   margin-bottom: 8px;
@@ -60,12 +60,67 @@
 .form-group input::placeholder,
 .form-group textarea::placeholder {
   color: var(--text-muted);
-  opacity: 0.7;
+  opacity: 0.4;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.45), inset -3px -3px 8px rgba(255, 255, 255, 0.05), 0 0 0 1px var(--accent);
+}
+
+.tag-input-wrapper {
+  display: flex;
+  gap: 12px;
+}
+
+.tag-input-wrapper input {
+  flex: 1;
+}
+
+.add-tag-btn {
+  padding: 0 24px;
+  border-radius: var(--border-radius-md);
+  background-color: var(--bg-surface);
+  color: var(--text-h);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all var(--transition);
+}
+
+.add-tag-btn:hover {
+  box-shadow: var(--neo-btn-hover);
+  background-color: var(--bg);
+}
+
+.tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.tag-chip {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.remove-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: color var(--transition);
+}
+
+.remove-tag:hover {
+  color: var(--accent);
 }
 
 .publish-btn {
@@ -89,11 +144,6 @@
   background-color: var(--accent-hover);
   box-shadow: var(--neo-btn-hover), 0 0 20px var(--accent-glow);
   transform: translateY(-2px);
-}
-
-.publish-btn:active {
-  transform: translateY(0);
-  box-shadow: var(--neo-in);
 }
 
 @media (max-width: 600px) {

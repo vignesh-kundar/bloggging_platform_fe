@@ -16,7 +16,7 @@ const CalendarIcon = () => (
   </svg>
 );
 
-const MAX_VISIBLE_TAGS = 2;
+const MAX_VISIBLE_TAGS = 3;
 
 export default function PostCard({ post }) {
   const { title, excerpt, tags = [], date } = post;
