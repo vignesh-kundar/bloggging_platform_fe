@@ -66,7 +66,7 @@
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.45), inset -3px -3px 8px rgba(255, 255, 255, 0.05), 0 0 0 1px var(--accent);
+  box-shadow: var(--neo-in), 0 0 0 1px var(--accent);
 }
 
 .select-wrapper {

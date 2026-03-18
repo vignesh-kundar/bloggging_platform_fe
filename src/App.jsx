@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import './App.css';
 import { PostsProvider, usePosts } from './context/PostsContext';
 import Navbar from './components/layout/Navbar';
@@ -39,6 +39,17 @@ function ErrorDisplay({ message, onRetry }) {
 
 function AppContent() {
   const [activePage, setActivePage] = useState('home');
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  }, []);
+
   const { 
     posts, 
     loading, 
@@ -93,7 +104,12 @@ function AppContent() {
 
   return (
     <div className="app">
-      <Navbar activePage={activePage} setActivePage={handleNavigate} />
+      <Navbar 
+        activePage={activePage} 
+        setActivePage={handleNavigate} 
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
       <main className="app__main">
         {activePage === 'home' && (
           <>

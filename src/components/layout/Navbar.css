@@ -81,17 +81,48 @@
   box-shadow: var(--neo-btn-hover), 0 0 20px var(--accent-glow);
 }
 
+.navbar__theme-toggle {
+  margin-left: 8px;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  color: var(--accent);
+  transition: all var(--transition);
+}
+
+.theme-toggle:hover {
+  box-shadow: var(--neo-btn-hover);
+  color: var(--accent-hover);
+}
+
 @media (max-width: 600px) {
   .navbar {
     padding: 14px 20px;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+  }
+
+  .navbar__logo {
+    width: 100%;
+    justify-content: center;
   }
 
   .navbar__links {
     gap: 6px;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .nav-link {
-    padding: 8px 14px;
-    font-size: 0.82rem;
+    padding: 8px 12px;
+    font-size: 0.8rem;
   }
 }

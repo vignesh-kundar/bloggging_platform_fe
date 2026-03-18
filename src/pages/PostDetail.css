@@ -81,6 +81,7 @@
   margin-top: 60px;
   padding: 24px 32px;
   border-radius: var(--border-radius-lg);
+  box-shadow: var(--neo-in);
   display: flex;
   flex-direction: column;
   gap: 8px;

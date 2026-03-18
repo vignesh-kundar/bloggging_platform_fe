@@ -8,33 +8,36 @@
 
 :root {
   /* Base colors */
-  --bg:           #1a1a2e;
-  --bg-surface:   #1e1e35;
-  --bg-card:      #1d1d32;
+  --bg:           #edf1f7;
+  --bg-surface:   #f0f4f8;
+  --bg-card:      #edf1f7;
 
   /* Neomorphic shadows (light source from top-left) */
-  --shadow-out-light: rgba(255, 255, 255, 0.05);
-  --shadow-out-dark:  rgba(0, 0, 0, 0.5);
-  --shadow-in-light:  rgba(255, 255, 255, 0.04);
-  --shadow-in-dark:   rgba(0, 0, 0, 0.4);
+  --shadow-out-light: #ffffff;
+  --shadow-out-dark:  #d1d9e6;
+  --shadow-in-light:  #ffffff;
+  --shadow-in-dark:   #d1d1e0;
 
   /* Neomorphism presets */
-  --neo-out:  6px 6px 14px var(--shadow-out-dark), -4px -4px 10px var(--shadow-out-light);
-  --neo-in:   inset 4px 4px 10px var(--shadow-in-dark), inset -3px -3px 8px var(--shadow-in-light);
-  --neo-btn:  4px 4px 10px var(--shadow-out-dark), -2px -2px 6px var(--shadow-out-light);
-  --neo-btn-hover: 2px 2px 6px var(--shadow-out-dark), -1px -1px 4px var(--shadow-out-light);
-  --neo-tag:  3px 3px 7px var(--shadow-out-dark), -2px -2px 5px var(--shadow-out-light);
+  --neo-out:  8px 8px 16px var(--shadow-out-dark), -8px -8px 16px var(--shadow-out-light);
+  --neo-in:   inset 6px 6px 12px var(--shadow-in-dark), inset -6px -6px 12px var(--shadow-in-light);
+  --neo-btn:  5px 5px 10px var(--shadow-out-dark), -5px -5px 10px var(--shadow-out-light);
+  --neo-btn-hover: 2px 2px 5px var(--shadow-out-dark), -2px -2px 5px var(--shadow-out-light);
+  --neo-tag:  3px 3px 6px var(--shadow-out-dark), -3px -3px 6px var(--shadow-out-light);
 
-  /* Accent */
-  --accent:       #5b6ef5;
-  --accent-hover: #7b8bf7;
-  --accent-glow:  rgba(91, 110, 245, 0.35);
+  /* Accent - Teal/Cyan from favicon */
+  --accent:       #2c8a8a;
+  --accent-hover: #36a3a3;
+  --accent-glow:  rgba(44, 138, 138, 0.15);
+
+  /* Primary branding */
+  --primary:      var(--accent);
 
   /* Text */
-  --text-h:       #e8e8f0;
-  --text-primary: #c5c5d8;
-  --text-muted:   #7a7a9a;
-  --text-tag:     #9595b5;
+  --text-h:       #1a202c;
+  --text-primary: #2d3748;
+  --text-muted:   #718096;
+  --text-tag:     #4a5568;
 
   /* Misc */
   --border-radius-sm:  8px;
@@ -42,6 +45,28 @@
   --border-radius-lg:  20px;
   --border-radius-xl:  28px;
   --transition:        0.25s ease;
+}
+
+[data-theme='dark'] {
+  /* Base colors - Dark Mode */
+  --bg:           #1a1b26;
+  --bg-surface:   #1f202e;
+  --bg-card:      #1a1b26;
+
+  /* Neomorphic shadows - Dark Mode */
+  --shadow-out-light: rgba(255, 255, 255, 0.03);
+  --shadow-out-dark:  rgba(0, 0, 0, 0.45);
+  --shadow-in-light:  rgba(255, 255, 255, 0.02);
+  --shadow-in-dark:   rgba(0, 0, 0, 0.35);
+
+  /* Text - Dark Mode */
+  --text-h:       #f8fafc;
+  --text-primary: #cbd5e1;
+  --text-muted:   #64748b;
+  --text-tag:     #94a3b8;
+
+  /* Accent - Keep Teal/Cyan */
+  --accent-glow:  rgba(44, 138, 138, 0.25);
 }
 
 html, body, #root {

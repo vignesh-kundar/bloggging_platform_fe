@@ -75,7 +75,7 @@
   padding: 30px 20px;
   font-size: 0.78rem;
   color: var(--text-muted);
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-top: 1px solid var(--shadow-out-dark);
   display: flex;
   flex-direction: column;
   gap: 8px;
