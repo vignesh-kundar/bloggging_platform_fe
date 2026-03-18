@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import './App.css';
 import { PostsProvider, usePosts } from './context/PostsContext';
+import { NotificationProvider, useNotification } from './context/NotificationContext';
 import Navbar from './components/layout/Navbar';
 import Hero from './components/Hero';
 import PostCard from './components/PostCard';
@@ -40,6 +41,7 @@ function ErrorDisplay({ message, onRetry }) {
 function AppContent() {
   const [activePage, setActivePage] = useState('home');
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -73,22 +75,24 @@ function AppContent() {
       await createPost(newPostData);
       setActivePage('home');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      showNotification('Post published successfully!', 'success');
     } catch (err) {
-      alert('Failed to publish post: ' + err.message);
+      showNotification('Failed to publish post: ' + err.message, 'error');
     }
-  }, [createPost]);
+  }, [createPost, showNotification]);
 
   const handleDelete = useCallback(async (id) => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
     try {
       await deletePost(id);
+      showNotification('Post deleted successfully', 'success');
       if (activePage === 'post') {
         setActivePage('home');
       }
     } catch (err) {
-      alert('Failed to delete post: ' + err.message);
+      showNotification('Failed to delete post: ' + err.message, 'error');
     }
-  }, [deletePost, activePage]);
+  }, [deletePost, activePage, showNotification]);
 
   const handleViewPost = useCallback((post) => {
     setCurrentPost(post);
@@ -159,8 +163,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <PostsProvider>
-      <AppContent />
-    </PostsProvider>
+    <NotificationProvider>
+      <PostsProvider>
+        <AppContent />
+      </PostsProvider>
+    </NotificationProvider>
   );
 }
