@@ -41,7 +41,7 @@ function ErrorDisplay({ message, onRetry }) {
 function AppContent() {
   const [activePage, setActivePage] = useState('home');
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
-  const { showNotification } = useNotification();
+  const { showNotification, confirmAction } = useNotification();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -82,17 +82,18 @@ function AppContent() {
   }, [createPost, showNotification]);
 
   const handleDelete = useCallback(async (id) => {
-    if (!window.confirm('Are you sure you want to delete this post?')) return;
-    try {
-      await deletePost(id);
-      showNotification('Post deleted successfully', 'success');
-      if (activePage === 'post') {
-        setActivePage('home');
+    confirmAction('Are you sure you want to delete this post?', async () => {
+      try {
+        await deletePost(id);
+        showNotification('Post deleted successfully', 'success');
+        if (activePage === 'post') {
+          setActivePage('home');
+        }
+      } catch (err) {
+        showNotification('Failed to delete post: ' + err.message, 'error');
       }
-    } catch (err) {
-      showNotification('Failed to delete post: ' + err.message, 'error');
-    }
-  }, [deletePost, activePage, showNotification]);
+    });
+  }, [deletePost, activePage, showNotification, confirmAction]);
 
   const handleViewPost = useCallback((post) => {
     setCurrentPost(post);

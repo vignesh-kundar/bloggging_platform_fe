@@ -1,6 +1,6 @@
 .toast-container {
   position: fixed;
-  top: 30px;
+  top: 90px;
   right: 30px;
   display: flex;
   flex-direction: column;
@@ -74,25 +74,108 @@
   opacity: 1;
 }
 
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+.confirm-dialog {
+  background-color: var(--bg);
+  padding: 40px;
+  border-radius: var(--border-radius-lg);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.confirm-dialog__icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.confirm-dialog__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-h);
+  margin-bottom: 12px;
+}
+
+.confirm-dialog__message {
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.confirm-dialog__actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.confirm-btn {
+  padding: 12px 30px;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all var(--transition);
+}
+
+.confirm-btn--cancel {
+  color: var(--text-muted);
+}
+
+.confirm-btn--cancel:hover {
+  box-shadow: var(--neo-btn-hover);
+  color: var(--text-h);
+}
+
+.confirm-btn--danger {
+  color: #ff5f5f;
+}
+
+.confirm-btn--danger:hover {
+  box-shadow: var(--neo-btn-hover);
+  color: #ff4040;
+}
+
 @keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 @media (max-width: 480px) {
   .toast-container {
-    top: 20px;
+    top: 100px;
     right: 20px;
     left: 20px;
   }
   
-  .toast {
-    min-width: auto;
-  }
+  .toast { min-width: auto; }
+  
+  .confirm-dialog { padding: 30px 20px; }
+  .confirm-dialog__actions { flex-direction: column; gap: 12px; }
+  .confirm-btn { width: 100%; }
 }
