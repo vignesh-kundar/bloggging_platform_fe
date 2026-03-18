@@ -133,6 +133,9 @@ function AppContent() {
       </main>
       <footer className="app__footer">
         <p>© 2026 Blogify. A space for mindful writing.</p>
+        <p className="app__footer-credit">
+          <a href="https://vigneshkundar.vercel.app" target="_blank" rel="noopener noreferrer">Vignesh Kundar</a>
+        </p>
       </footer>
     </div>
   );
