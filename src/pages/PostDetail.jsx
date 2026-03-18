@@ -25,7 +25,7 @@ const CalendarIcon = () => (
 );
 
 export default function PostDetail({ onBack }) {
-  const { currentPost, loading, error } = usePosts();
+  const { currentPost } = usePosts();
   
   if (!currentPost) return <div className="loading-state">Loading post...</div>;
 

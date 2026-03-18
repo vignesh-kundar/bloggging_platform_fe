@@ -112,6 +112,7 @@ export function PostsProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function usePosts() {
   const context = useContext(PostsContext);
   if (!context) {
