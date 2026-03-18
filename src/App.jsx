@@ -1,94 +1,117 @@
-import { useState, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import './App.css';
+import { PostsProvider, usePosts } from './context/PostsContext';
 import Navbar from './components/layout/Navbar';
 import Hero from './components/Hero';
 import PostCard from './components/PostCard';
 import About from './pages/About';
 import NewPost from './pages/NewPost';
 import PostDetail from './pages/PostDetail';
-import { INITIAL_POSTS } from './data/posts';
 
 function EmptyState({ query }) {
   return (
     <div className="empty-state">
-      <div className="empty-state__icon">🔍</div>
+      <div className="empty-state__icon">📝</div>
       <h3>No posts found</h3>
-      <p>No posts matched &ldquo;{query}&rdquo;. Try a different search.</p>
+      {query ? (
+        <p>No posts matched &ldquo;{query}&rdquo;. Try a different search.</p>
+      ) : (
+        <p>Be the first to create a post!</p>
+      )}
     </div>
   );
 }
 
-export default function App() {
+function ErrorDisplay({ message, onRetry }) {
+  return (
+    <div className="error-state">
+      <div className="error-state__icon">⚠️</div>
+      <h3>Something went wrong</h3>
+      <p>{message}</p>
+      {onRetry && (
+        <button onClick={onRetry} className="retry-btn">
+          Try Again
+        </button>
+      )}
+    </div>
+  );
+}
+
+function AppContent() {
   const [activePage, setActivePage] = useState('home');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [posts, setPosts] = useState(INITIAL_POSTS);
-  const [currentPost, setCurrentPost] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { 
+    posts, 
+    loading, 
+    error, 
+    searchQuery, 
+    fetchPosts,
+    deletePost,
+    setCurrentPost,
+    createPost,
+    clearError 
+  } = usePosts();
 
-  const filteredPosts = useMemo(() => {
-    if (!searchQuery.trim()) return posts;
-    const term = searchQuery.toLowerCase();
-    return posts.filter(post => 
-      post.title.toLowerCase().includes(term) ||
-      post.content.toLowerCase().includes(term) ||
-      post.category.toLowerCase().includes(term) ||
-      post.tags.some(tag => tag.toLowerCase().includes(term))
-    );
-  }, [posts, searchQuery]);
-
-  const handleSearch = (term) => {
-    setSearchQuery(term);
-  };
-
-  const handlePublish = (newPostData) => {
-    const newPost = {
-      ...newPostData,
-      id: Date.now(),
-      createdAt: new Date().toISOString(),
-      author: 'You'
-    };
-    setPosts([newPost, ...posts]);
+  const handleSearch = useCallback((term) => {
+    clearError();
     setActivePage('home');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+    fetchPosts(term);
+  }, [clearError, fetchPosts]);
 
-  const handleDelete = (id) => {
-    if (!window.confirm('Are you sure you want to delete this post?')) return;
-    setPosts(posts.filter(p => p.id !== id));
-    if (currentPost?.id === id) {
-      setCurrentPost(null);
+  const handlePublish = useCallback(async (newPostData) => {
+    try {
+      await createPost(newPostData);
       setActivePage('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      alert('Failed to publish post: ' + err.message);
     }
-  };
+  }, [createPost]);
 
-  const handleViewPost = (id) => {
-    const post = posts.find(p => p.id === id);
-    if (post) {
-      setCurrentPost(post);
-      setActivePage('post');
-      window.scrollTo({ top: 0, behavior: 'auto' });
+  const handleDelete = useCallback(async (id) => {
+    if (!window.confirm('Are you sure you want to delete this post?')) return;
+    try {
+      await deletePost(id);
+      if (activePage === 'post') {
+        setActivePage('home');
+      }
+    } catch (err) {
+      alert('Failed to delete post: ' + err.message);
     }
-  };
+  }, [deletePost, activePage]);
+
+  const handleViewPost = useCallback((post) => {
+    setCurrentPost(post);
+    setActivePage('post');
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [setCurrentPost]);
+
+  const handleNavigate = useCallback((page) => {
+    clearError();
+    setActivePage(page);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [clearError]);
 
   return (
     <div className="app">
-      <Navbar activePage={activePage} setActivePage={setActivePage} />
+      <Navbar activePage={activePage} setActivePage={handleNavigate} />
       <main className="app__main">
         {activePage === 'home' && (
           <>
             <Hero onSearch={handleSearch} />
             {loading ? (
               <div className="loading-state">Loading posts...</div>
-            ) : filteredPosts.length === 0 ? (
+            ) : error ? (
+              <ErrorDisplay message={error} onRetry={() => fetchPosts(searchQuery)} />
+            ) : posts.length === 0 ? (
               <EmptyState query={searchQuery} />
             ) : (
               <section className="blog-grid">
-                {filteredPosts.map((post) => (
+                {posts.map((post) => (
                   <PostCard 
                     key={post.id} 
                     post={post} 
                     onDelete={() => handleDelete(post.id)}
-                    onClick={() => handleViewPost(post.id)}
+                    onClick={() => handleViewPost(post)}
                   />
                 ))}
               </section>
@@ -97,7 +120,7 @@ export default function App() {
         )}
 
         {activePage === 'post' && (
-          <PostDetail post={currentPost} onBack={() => setActivePage('home')} />
+          <PostDetail onBack={() => handleNavigate('home')} />
         )}
         
         {activePage === 'new' && (
@@ -112,5 +135,13 @@ export default function App() {
         <p>© 2026 Blogify. A space for mindful writing.</p>
       </footer>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <PostsProvider>
+      <AppContent />
+    </PostsProvider>
   );
 }

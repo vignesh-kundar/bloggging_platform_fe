@@ -1,3 +1,4 @@
+import { usePosts } from '../context/PostsContext';
 import './PostDetail.css';
 
 const ArrowLeftIcon = () => (
@@ -23,10 +24,12 @@ const CalendarIcon = () => (
   </svg>
 );
 
-export default function PostDetail({ post, onBack }) {
-  if (!post) return <div className="loading-state">Loading post...</div>;
+export default function PostDetail({ onBack }) {
+  const { currentPost, loading, error } = usePosts();
+  
+  if (!currentPost) return <div className="loading-state">Loading post...</div>;
 
-  const { title, content, tags = [], createdAt, updatedAt } = post;
+  const { title, content, tags = [], createdAt, updatedAt } = currentPost;
 
   const formatDate = (dateStr) => {
     if (!dateStr) return 'N/A';

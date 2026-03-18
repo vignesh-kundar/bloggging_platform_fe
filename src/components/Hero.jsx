@@ -11,12 +11,19 @@ const SearchIcon = () => (
 export default function Hero({ onSearch }) {
   const [value, setValue] = useState('');
   const debounceRef = useRef(null);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       onSearch(value);
     }, 300);
+    
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
