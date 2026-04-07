@@ -1,11 +1,11 @@
 .about-page {
-  max-width: 1100px;
-  margin: 0 auto 80px;
-  padding: 0 40px;
+  max-width: 1200px;
+  margin: 0 auto 100px;
+  padding: 0 48px;
   animation: fadeIn 0.6s ease;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 48px;
 }
 
 @keyframes fadeIn {
@@ -14,73 +14,81 @@
 }
 
 .about-hero {
-  padding: 80px 52px;
+  padding: 88px 64px;
   border-radius: var(--border-radius-xl);
   background-color: var(--bg-surface);
   text-align: center;
+  box-shadow: var(--neo-out);
 }
 
 .about-hero__title {
-  font-size: clamp(2.5rem, 6vw, 3.8rem);
+  font-size: clamp(2.6rem, 6vw, 3.8rem);
   font-weight: 800;
   color: var(--text-h);
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 .about-hero__subtitle {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: var(--text-muted);
   max-width: 700px;
   margin: 0 auto;
-  line-height: 1.6;
+  line-height: 1.65;
+  letter-spacing: 0.2px;
 }
 
 .about-mission, .about-story {
-  padding: 48px 52px;
+  padding: 56px 64px;
   border-radius: var(--border-radius-xl);
   background-color: var(--bg-surface);
+  box-shadow: var(--neo-out);
 }
 
 .about-mission__title, .about-story__title {
-  font-size: 1.8rem;
+  font-size: 1.85rem;
   font-weight: 700;
   color: var(--text-h);
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  letter-spacing: -0.01em;
 }
 
 .about-mission__content, .about-story__content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .about-mission__content p, .about-story__content p {
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 1.02rem;
+  line-height: 1.75;
   color: var(--text-primary);
   opacity: 0.9;
+  letter-spacing: 0.2px;
 }
 
 .about-features {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  gap: 32px;
 }
 
 .feature-card {
-  padding: 40px 32px;
+  padding: 44px 36px;
   border-radius: var(--border-radius-xl);
   background-color: var(--bg-surface);
   text-align: center;
-  transition: transform var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition);
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: var(--neo-out);
 }
 
 .feature-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.12), -10px -10px 20px rgba(255, 255, 255, 0.04);
 }
 
 .feature-card__icon {
@@ -97,16 +105,18 @@
 }
 
 .feature-card__title {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--text-h);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
 }
 
 .feature-card__text {
-  font-size: 0.9rem;
-  line-height: 1.6;
+  font-size: 0.93rem;
+  line-height: 1.65;
   color: var(--text-muted);
+  letter-spacing: 0.2px;
 }
 
 @media (max-width: 992px) {

@@ -1,0 +1,37 @@
+import { API_CONFIG } from '../config/api.config';
+
+export const authApi = {
+  async login(email, password) {
+    const response = await fetch(API_CONFIG.ENDPOINTS.LOGIN, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.errorMesssage || error.message || 'Login failed');
+    }
+
+    return response.json();
+  },
+
+  async register(name, email, userName, password) {
+    const response = await fetch(API_CONFIG.ENDPOINTS.REGISTER, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, userName, password }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.errorMesssage || error.message || 'Registration failed');
+    }
+
+    return response.json();
+  },
+};

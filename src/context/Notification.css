@@ -1,19 +1,19 @@
 .toast-container {
   position: fixed;
-  top: 90px;
-  right: 30px;
+  top: 100px;
+  right: 40px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   z-index: 9999;
   pointer-events: none;
 }
 
 .toast {
   pointer-events: auto;
-  min-width: 280px;
-  max-width: 400px;
-  padding: 16px 20px;
+  min-width: 300px;
+  max-width: 420px;
+  padding: 18px 22px;
   border-radius: var(--border-radius-md);
   background-color: var(--bg-surface);
   display: flex;
@@ -23,6 +23,7 @@
   animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
+  box-shadow: var(--neo-out);
 }
 
 .toast::before {
@@ -53,10 +54,11 @@
 }
 
 .toast__message {
-  font-size: 0.9rem;
+  font-size: 0.93rem;
   font-weight: 500;
   color: var(--text-primary);
-  line-height: 1.4;
+  line-height: 1.45;
+  letter-spacing: 0.2px;
 }
 
 .toast__close {
@@ -92,12 +94,13 @@
 
 .confirm-dialog {
   background-color: var(--bg);
-  padding: 40px;
+  padding: 48px;
   border-radius: var(--border-radius-lg);
-  max-width: 400px;
+  max-width: 420px;
   width: 90%;
   text-align: center;
   animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 .confirm-dialog__icon {

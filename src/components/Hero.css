@@ -1,36 +1,37 @@
 .hero {
-  margin: 0 40px 40px;
-  padding: 48px 52px;
+  margin: 0 48px 48px;
+  padding: 56px 64px;
   border-radius: var(--border-radius-xl);
   background-color: var(--bg-surface);
 }
 
 .hero__title {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
   font-weight: 800;
   color: var(--text-h);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .hero__subtitle {
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--text-muted);
-  margin-bottom: 32px;
-  max-width: 500px;
+  margin-bottom: 40px;
+  max-width: 550px;
+  line-height: 1.6;
 }
 
 .hero__search {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 20px;
+  padding: 16px 24px;
   border-radius: var(--border-radius-md);
   background-color: var(--bg);
-  max-width: 500px;
+  max-width: 550px;
   color: var(--text-muted);
-  transition: box-shadow var(--transition);
+  transition: box-shadow var(--transition), background-color var(--transition);
 }
 
 .hero__search:focus-within {
@@ -43,8 +44,9 @@
   border: none;
   outline: none;
   font-family: inherit;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--text-primary);
+  letter-spacing: 0.3px;
 }
 
 .hero__search input::placeholder {

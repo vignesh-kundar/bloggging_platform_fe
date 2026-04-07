@@ -25,11 +25,18 @@ const TrashIcon = () => (
   </svg>
 );
 
+const UserIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
 const MAX_VISIBLE_TAGS = 3;
 const MAX_EXCERPT_LENGTH = 150;
 
 export default function PostCard({ post, onDelete, onClick }) {
-  const { title, content, tags = [], createdAt, id } = post;
+  const { title, content, tags = [], createdAt, id, author } = post;
   const visibleTags = tags.slice(0, MAX_VISIBLE_TAGS);
   const extraCount = tags.length - MAX_VISIBLE_TAGS;
 
@@ -59,8 +66,14 @@ export default function PostCard({ post, onDelete, onClick }) {
       <p className="post-card__excerpt">{excerpt}</p>
       <div className="post-card__footer">
         <div className="post-card__meta">
-          <CalendarIcon />
-          <time>{displayDate}</time>
+          {author && (
+            <span className="post-card__author">
+              <UserIcon /> {author.name}
+            </span>
+          )}
+          <span className="post-card__date">
+            <CalendarIcon /> {displayDate}
+          </span>
         </div>
         <button className="post-card__delete neo-tag" onClick={(e) => {
           e.stopPropagation();

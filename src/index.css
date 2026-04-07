@@ -19,11 +19,11 @@
   --shadow-in-dark:   #d1d1e0;
 
   /* Neomorphism presets */
-  --neo-out:  8px 8px 16px var(--shadow-out-dark), -8px -8px 16px var(--shadow-out-light);
-  --neo-in:   inset 6px 6px 12px var(--shadow-in-dark), inset -6px -6px 12px var(--shadow-in-light);
-  --neo-btn:  5px 5px 10px var(--shadow-out-dark), -5px -5px 10px var(--shadow-out-light);
-  --neo-btn-hover: 2px 2px 5px var(--shadow-out-dark), -2px -2px 5px var(--shadow-out-light);
-  --neo-tag:  3px 3px 6px var(--shadow-out-dark), -3px -3px 6px var(--shadow-out-light);
+  --neo-out:  6px 6px 14px var(--shadow-out-dark), -6px -6px 14px var(--shadow-out-light);
+  --neo-in:   inset 4px 4px 10px var(--shadow-in-dark), inset -4px -4px 10px var(--shadow-in-light);
+  --neo-btn:  4px 4px 8px var(--shadow-out-dark), -4px -4px 8px var(--shadow-out-light);
+  --neo-btn-hover: 2px 2px 4px var(--shadow-out-dark), -2px -2px 4px var(--shadow-out-light);
+  --neo-tag:  2px 2px 4px var(--shadow-out-dark), -2px -2px 4px var(--shadow-out-light);
 
   /* Accent - Teal/Cyan from favicon */
   --accent:       #2c8a8a;

@@ -1,8 +1,15 @@
 import { API_CONFIG } from '../config/api.config';
 
+const getAuthHeader = () => {
+  const token = sessionStorage.getItem('token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 export const postsApi = {
   async getAll() {
-    const response = await fetch(API_CONFIG.ENDPOINTS.POSTS);
+    const response = await fetch(API_CONFIG.ENDPOINTS.POSTS, {
+      headers: getAuthHeader(),
+    });
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
       throw new Error(error.message || 'Failed to fetch posts');
@@ -11,7 +18,9 @@ export const postsApi = {
   },
 
   async getById(id) {
-    const response = await fetch(API_CONFIG.ENDPOINTS.POST_BY_ID(id));
+    const response = await fetch(API_CONFIG.ENDPOINTS.POST_BY_ID(id), {
+      headers: getAuthHeader(),
+    });
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
       throw new Error(error.message || 'Failed to fetch post');
@@ -24,6 +33,7 @@ export const postsApi = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...getAuthHeader(),
       },
       body: JSON.stringify(postData),
     });
@@ -37,6 +47,7 @@ export const postsApi = {
   async delete(id) {
     const response = await fetch(API_CONFIG.ENDPOINTS.POST_BY_ID(id), {
       method: 'DELETE',
+      headers: getAuthHeader(),
     });
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
@@ -46,7 +57,9 @@ export const postsApi = {
   },
 
   async search(term) {
-    const response = await fetch(API_CONFIG.ENDPOINTS.SEARCH_POSTS(term));
+    const response = await fetch(API_CONFIG.ENDPOINTS.SEARCH_POSTS(term), {
+      headers: getAuthHeader(),
+    });
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
       throw new Error(error.message || 'Failed to search posts');

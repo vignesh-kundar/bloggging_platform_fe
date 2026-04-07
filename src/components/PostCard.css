@@ -1,17 +1,18 @@
 .post-card {
   background-color: var(--bg-card);
   border-radius: var(--border-radius-lg);
-  padding: 24px;
+  padding: 28px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
   cursor: pointer;
-  transition: box-shadow var(--transition), transform var(--transition);
+  transition: box-shadow var(--transition), transform var(--transition), background-color var(--transition);
+  box-shadow: var(--neo-out);
 }
 
 .post-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--neo-out);
+  transform: translateY(-4px);
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.15), -10px -10px 20px rgba(255, 255, 255, 0.05);
 }
 
 .post-card__tags {
@@ -24,14 +25,15 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  border-radius: 10px;
-  font-size: 0.75rem;
+  padding: 7px 14px;
+  border-radius: 12px;
+  font-size: 0.78rem;
   font-weight: 500;
   color: var(--text-tag);
   background-color: var(--bg-surface);
   box-shadow: var(--neo-tag);
   white-space: nowrap;
+  letter-spacing: 0.3px;
 }
 
 .post-card__tag svg {
@@ -44,23 +46,25 @@
 }
 
 .post-card__title {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--text-h);
-  line-height: 1.35;
-  margin-top: 4px;
+  line-height: 1.4;
+  margin-top: 6px;
+  letter-spacing: -0.01em;
 }
 
 .post-card__excerpt {
-  font-size: 0.92rem;
-  line-height: 1.6;
+  font-size: 0.95rem;
+  line-height: 1.7;
   color: var(--text-primary);
   display: -webkit-box;
   line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  opacity: 0.85;
+  opacity: 0.88;
+  letter-spacing: 0.2px;
 }
 
 .post-card__footer {
@@ -68,15 +72,32 @@
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
-  padding-top: 12px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .post-card__meta {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
+  gap: 16px;
+  font-size: 0.88rem;
   color: var(--text-muted);
+  letter-spacing: 0.2px;
+}
+
+.post-card__author {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.post-card__date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .post-card__delete {
