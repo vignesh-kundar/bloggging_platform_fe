@@ -1,121 +1,211 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState, useCallback, useEffect } from 'react';
+import './App.css';
+import { PostsProvider, usePosts } from './context/PostsContext';
+import { NotificationProvider, useNotification } from './context/NotificationContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Navbar from './components/layout/Navbar';
+import Hero from './components/Hero';
+import PostCard from './components/PostCard';
+import About from './pages/About';
+import NewPost from './pages/NewPost';
+import PostDetail from './pages/PostDetail';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function EmptyState({ query }) {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    <div className="empty-state">
+      <div className="empty-state__icon">📝</div>
+      <h3>No posts found</h3>
+      {query ? (
+        <p>No posts matched &ldquo;{query}&rdquo;. Try a different search.</p>
+      ) : (
+        <p>Be the first to create a post!</p>
+      )}
+    </div>
+  );
 }
 
-export default App
+function ErrorDisplay({ message, onRetry }) {
+  return (
+    <div className="error-state">
+      <div className="error-state__icon">⚠️</div>
+      <h3>Something went wrong</h3>
+      <p>{message}</p>
+      {onRetry && (
+        <button onClick={onRetry} className="retry-btn">
+          Try Again
+        </button>
+      )}
+    </div>
+  );
+}
+
+function AuthGate() {
+  const [authPage, setAuthPage] = useState('login');
+  const { showNotification } = useNotification();
+
+  const handleSwitchToRegister = useCallback(() => {
+    setAuthPage('register');
+  }, []);
+
+  const handleSwitchToLogin = useCallback(() => {
+    showNotification('Account created! Please sign in.', 'success');
+    setAuthPage('login');
+  }, [showNotification]);
+
+  if (authPage === 'register') {
+    return <Register onSwitchToLogin={handleSwitchToLogin} />;
+  }
+
+  return <Login onSwitchToRegister={handleSwitchToRegister} />;
+}
+
+function AppContent() {
+  const [activePage, setActivePage] = useState('home');
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+  const { showNotification, confirmAction } = useNotification();
+  const { isAuthenticated, logout, getAuthHeaders } = useAuth();
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  }, []);
+
+  const { 
+    posts, 
+    loading, 
+    error, 
+    searchQuery, 
+    fetchPosts,
+    deletePost,
+    setCurrentPost,
+    createPost,
+    clearError 
+  } = usePosts();
+
+  const handleSearch = useCallback((term) => {
+    clearError();
+    setActivePage('home');
+    fetchPosts(term);
+  }, [clearError, fetchPosts]);
+
+  const handlePublish = useCallback(async (newPostData) => {
+    try {
+      await createPost(newPostData, getAuthHeaders());
+      setActivePage('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showNotification('Post published successfully!', 'success');
+    } catch (err) {
+      showNotification('Failed to publish post: ' + err.message, 'error');
+    }
+  }, [createPost, getAuthHeaders, showNotification]);
+
+  const handleDelete = useCallback(async (id) => {
+    confirmAction('Are you sure you want to delete this post?', async () => {
+      try {
+        await deletePost(id, getAuthHeaders());
+        showNotification('Post deleted successfully', 'success');
+        if (activePage === 'post') {
+          setActivePage('home');
+        }
+      } catch (err) {
+        showNotification('Failed to delete post: ' + err.message, 'error');
+      }
+    });
+  }, [deletePost, getAuthHeaders, activePage, showNotification, confirmAction]);
+
+  const handleViewPost = useCallback((post) => {
+    setCurrentPost(post);
+    setActivePage('post');
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [setCurrentPost]);
+
+  const handleNavigate = useCallback((page) => {
+    clearError();
+    setActivePage(page);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [clearError]);
+
+  const handleLogout = useCallback(() => {
+    logout();
+    showNotification('Logged out successfully', 'info');
+  }, [logout, showNotification]);
+
+  // If not authenticated, show login/register
+  if (!isAuthenticated) {
+    return <AuthGate />;
+  }
+
+  return (
+    <div className="app">
+      <Navbar 
+        activePage={activePage} 
+        setActivePage={handleNavigate} 
+        theme={theme}
+        toggleTheme={toggleTheme}
+        onLogout={handleLogout}
+      />
+      <main className="app__main">
+        {activePage === 'home' && (
+          <>
+            <Hero onSearch={handleSearch} />
+            {loading ? (
+              <div className="loading-state">Loading posts...</div>
+            ) : error ? (
+              <ErrorDisplay message={error} onRetry={() => fetchPosts(searchQuery)} />
+            ) : posts.length === 0 ? (
+              <EmptyState query={searchQuery} />
+            ) : (
+              <section className="blog-grid">
+                {posts.map((post) => (
+                  <PostCard 
+                    key={post.id} 
+                    post={post} 
+                    onDelete={() => handleDelete(post.id)}
+                    onClick={() => handleViewPost(post)}
+                  />
+                ))}
+              </section>
+            )}
+          </>
+        )}
+
+        {activePage === 'post' && (
+          <PostDetail onBack={() => handleNavigate('home')} />
+        )}
+        
+        {activePage === 'new' && (
+          <NewPost onPublish={handlePublish} />
+        )}
+
+        {activePage === 'about' && (
+          <About />
+        )}
+      </main>
+      <footer className="app__footer">
+        <p>© 2026 Blogify. A space for mindful writing.</p>
+        <p className="app__footer-credit">
+          <a href="https://vigneshkundar.vercel.app" target="_blank" rel="noopener noreferrer">Vignesh Kundar</a>
+        </p>
+      </footer>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <NotificationProvider>
+      <AuthProvider>
+        <PostsProvider>
+          <AppContent />
+        </PostsProvider>
+      </AuthProvider>
+    </NotificationProvider>
+  );
+}
+

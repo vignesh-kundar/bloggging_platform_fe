@@ -1,0 +1,133 @@
+.about-page {
+  max-width: 1100px;
+  margin: 0 auto 80px;
+  padding: 0 40px;
+  animation: fadeIn 0.6s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.about-hero {
+  padding: 80px 52px;
+  border-radius: var(--border-radius-xl);
+  background-color: var(--bg-surface);
+  text-align: center;
+}
+
+.about-hero__title {
+  font-size: clamp(2.5rem, 6vw, 3.8rem);
+  font-weight: 800;
+  color: var(--text-h);
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.about-hero__subtitle {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.about-mission, .about-story {
+  padding: 48px 52px;
+  border-radius: var(--border-radius-xl);
+  background-color: var(--bg-surface);
+}
+
+.about-mission__title, .about-story__title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-h);
+  margin-bottom: 24px;
+}
+
+.about-mission__content, .about-story__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-mission__content p, .about-story__content p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  opacity: 0.9;
+}
+
+.about-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.feature-card {
+  padding: 40px 32px;
+  border-radius: var(--border-radius-xl);
+  background-color: var(--bg-surface);
+  text-align: center;
+  transition: transform var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-card__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background-color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  color: var(--text-h);
+  padding: 12px;
+}
+
+.feature-card__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-h);
+  margin-bottom: 12px;
+}
+
+.feature-card__text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+@media (max-width: 992px) {
+  .about-features {
+    grid-template-columns: repeat(1, 1fr);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-page {
+    padding: 0 20px;
+    margin-bottom: 40px;
+  }
+  
+  .about-hero, .about-mission, .about-story {
+    padding: 40px 24px;
+  }
+  
+  .about-hero__title {
+    font-size: 2.2rem;
+  }
+}
