@@ -40,10 +40,10 @@ export function PostsProvider({ children }) {
     }
   }, []);
 
-  const createPost = useCallback(async (postData) => {
+  const createPost = useCallback(async (postData, authHeaders = {}) => {
     try {
       setError(null);
-      const newPost = await postsApi.create(postData);
+      const newPost = await postsApi.create(postData, authHeaders);
       setPosts(prev => [newPost, ...prev]);
       return newPost;
     } catch (err) {
@@ -52,10 +52,10 @@ export function PostsProvider({ children }) {
     }
   }, []);
 
-  const deletePost = useCallback(async (id) => {
+  const deletePost = useCallback(async (id, authHeaders = {}) => {
     try {
       setError(null);
-      await postsApi.delete(id);
+      await postsApi.delete(id, authHeaders);
       setPosts(prev => prev.filter(p => p.id !== id));
       if (currentPost?.id === id) {
         setCurrentPost(null);

@@ -19,11 +19,12 @@ export const postsApi = {
     return response.json();
   },
 
-  async create(postData) {
+  async create(postData, authHeaders = {}) {
     const response = await fetch(API_CONFIG.ENDPOINTS.POSTS, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...authHeaders,
       },
       body: JSON.stringify(postData),
     });
@@ -34,9 +35,12 @@ export const postsApi = {
     return response.json();
   },
 
-  async delete(id) {
+  async delete(id, authHeaders = {}) {
     const response = await fetch(API_CONFIG.ENDPOINTS.POST_BY_ID(id), {
       method: 'DELETE',
+      headers: {
+        ...authHeaders,
+      },
     });
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
@@ -54,3 +58,4 @@ export const postsApi = {
     return response.json();
   }
 };
+

@@ -2,12 +2,15 @@ import { useState, useCallback, useEffect } from 'react';
 import './App.css';
 import { PostsProvider, usePosts } from './context/PostsContext';
 import { NotificationProvider, useNotification } from './context/NotificationContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/layout/Navbar';
 import Hero from './components/Hero';
 import PostCard from './components/PostCard';
 import About from './pages/About';
 import NewPost from './pages/NewPost';
 import PostDetail from './pages/PostDetail';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 function EmptyState({ query }) {
   return (
@@ -38,10 +41,31 @@ function ErrorDisplay({ message, onRetry }) {
   );
 }
 
+function AuthGate() {
+  const [authPage, setAuthPage] = useState('login');
+  const { showNotification } = useNotification();
+
+  const handleSwitchToRegister = useCallback(() => {
+    setAuthPage('register');
+  }, []);
+
+  const handleSwitchToLogin = useCallback(() => {
+    showNotification('Account created! Please sign in.', 'success');
+    setAuthPage('login');
+  }, [showNotification]);
+
+  if (authPage === 'register') {
+    return <Register onSwitchToLogin={handleSwitchToLogin} />;
+  }
+
+  return <Login onSwitchToRegister={handleSwitchToRegister} />;
+}
+
 function AppContent() {
   const [activePage, setActivePage] = useState('home');
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
   const { showNotification, confirmAction } = useNotification();
+  const { isAuthenticated, logout, getAuthHeaders } = useAuth();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -72,19 +96,19 @@ function AppContent() {
 
   const handlePublish = useCallback(async (newPostData) => {
     try {
-      await createPost(newPostData);
+      await createPost(newPostData, getAuthHeaders());
       setActivePage('home');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       showNotification('Post published successfully!', 'success');
     } catch (err) {
       showNotification('Failed to publish post: ' + err.message, 'error');
     }
-  }, [createPost, showNotification]);
+  }, [createPost, getAuthHeaders, showNotification]);
 
   const handleDelete = useCallback(async (id) => {
     confirmAction('Are you sure you want to delete this post?', async () => {
       try {
-        await deletePost(id);
+        await deletePost(id, getAuthHeaders());
         showNotification('Post deleted successfully', 'success');
         if (activePage === 'post') {
           setActivePage('home');
@@ -93,7 +117,7 @@ function AppContent() {
         showNotification('Failed to delete post: ' + err.message, 'error');
       }
     });
-  }, [deletePost, activePage, showNotification, confirmAction]);
+  }, [deletePost, getAuthHeaders, activePage, showNotification, confirmAction]);
 
   const handleViewPost = useCallback((post) => {
     setCurrentPost(post);
@@ -107,6 +131,16 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [clearError]);
 
+  const handleLogout = useCallback(() => {
+    logout();
+    showNotification('Logged out successfully', 'info');
+  }, [logout, showNotification]);
+
+  // If not authenticated, show login/register
+  if (!isAuthenticated) {
+    return <AuthGate />;
+  }
+
   return (
     <div className="app">
       <Navbar 
@@ -114,6 +148,7 @@ function AppContent() {
         setActivePage={handleNavigate} 
         theme={theme}
         toggleTheme={toggleTheme}
+        onLogout={handleLogout}
       />
       <main className="app__main">
         {activePage === 'home' && (
@@ -165,9 +200,12 @@ function AppContent() {
 export default function App() {
   return (
     <NotificationProvider>
-      <PostsProvider>
-        <AppContent />
-      </PostsProvider>
+      <AuthProvider>
+        <PostsProvider>
+          <AppContent />
+        </PostsProvider>
+      </AuthProvider>
     </NotificationProvider>
   );
 }
+
