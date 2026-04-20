@@ -1,10 +1,10 @@
-import { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import { authApi } from '../services/authApi';
 
 const AuthContext = createContext(null);
 
 const TOKEN_KEY = 'blogify_auth_token';
-const USER_KEY = 'blogify_auth_user';
+const USER_KEY  = 'blogify_auth_user';
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => sessionStorage.getItem(TOKEN_KEY));
@@ -45,6 +45,15 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
+  // When apiClient receives a 403, it dispatches this event.
+  // We react by clearing the session so React re-renders to the login gate.
+  useEffect(() => {
+    const handleExpired = () => logout();
+    window.addEventListener('auth:expired', handleExpired);
+    return () => window.removeEventListener('auth:expired', handleExpired);
+  }, [logout]);
+
+  // Kept for any call-sites that still pass headers explicitly
   const getAuthHeaders = useCallback(() => {
     if (!token) return {};
     return { Authorization: `Bearer ${token}` };

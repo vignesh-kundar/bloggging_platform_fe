@@ -65,7 +65,7 @@ function AppContent() {
   const [activePage, setActivePage] = useState('home');
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
   const { showNotification, confirmAction } = useNotification();
-  const { isAuthenticated, logout, getAuthHeaders } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -96,19 +96,19 @@ function AppContent() {
 
   const handlePublish = useCallback(async (newPostData) => {
     try {
-      await createPost(newPostData, getAuthHeaders());
+      await createPost(newPostData);
       setActivePage('home');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       showNotification('Post published successfully!', 'success');
     } catch (err) {
       showNotification('Failed to publish post: ' + err.message, 'error');
     }
-  }, [createPost, getAuthHeaders, showNotification]);
+  }, [createPost, showNotification]);
 
   const handleDelete = useCallback(async (id) => {
     confirmAction('Are you sure you want to delete this post?', async () => {
       try {
-        await deletePost(id, getAuthHeaders());
+        await deletePost(id);
         showNotification('Post deleted successfully', 'success');
         if (activePage === 'post') {
           setActivePage('home');
@@ -117,7 +117,7 @@ function AppContent() {
         showNotification('Failed to delete post: ' + err.message, 'error');
       }
     });
-  }, [deletePost, getAuthHeaders, activePage, showNotification, confirmAction]);
+  }, [deletePost, activePage, showNotification, confirmAction]);
 
   const handleViewPost = useCallback((post) => {
     setCurrentPost(post);
