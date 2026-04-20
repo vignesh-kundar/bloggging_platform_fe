@@ -1,61 +1,25 @@
 import { API_CONFIG } from '../config/api.config';
+import { apiClient } from './apiClient';
 
 export const postsApi = {
-  async getAll() {
-    const response = await fetch(API_CONFIG.ENDPOINTS.POSTS);
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      throw new Error(error.message || 'Failed to fetch posts');
-    }
-    return response.json();
+  getAll() {
+    return apiClient.get(API_CONFIG.ENDPOINTS.POSTS);
   },
 
-  async getById(id) {
-    const response = await fetch(API_CONFIG.ENDPOINTS.POST_BY_ID(id));
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      throw new Error(error.message || 'Failed to fetch post');
-    }
-    return response.json();
+  getById(id) {
+    return apiClient.get(API_CONFIG.ENDPOINTS.POST_BY_ID(id));
   },
 
-  async create(postData, authHeaders = {}) {
-    const response = await fetch(API_CONFIG.ENDPOINTS.POSTS, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...authHeaders,
-      },
-      body: JSON.stringify(postData),
-    });
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      throw new Error(error.message || 'Failed to create post');
-    }
-    return response.json();
+  create(postData) {
+    return apiClient.post(API_CONFIG.ENDPOINTS.POSTS, postData);
   },
 
-  async delete(id, authHeaders = {}) {
-    const response = await fetch(API_CONFIG.ENDPOINTS.POST_BY_ID(id), {
-      method: 'DELETE',
-      headers: {
-        ...authHeaders,
-      },
-    });
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      throw new Error(error.message || 'Failed to delete post');
-    }
-    return true;
+  delete(id) {
+    return apiClient.delete(API_CONFIG.ENDPOINTS.POST_BY_ID(id));
   },
 
-  async search(term) {
-    const response = await fetch(API_CONFIG.ENDPOINTS.SEARCH_POSTS(term));
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      throw new Error(error.message || 'Failed to search posts');
-    }
-    return response.json();
-  }
+  search(term) {
+    return apiClient.get(API_CONFIG.ENDPOINTS.SEARCH_POSTS(term));
+  },
 };
 
