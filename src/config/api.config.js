@@ -9,6 +9,7 @@ export const API_CONFIG = {
     // Auth
     LOGIN: `${AUTH_BASE_URL}/login`,
     REGISTER: `${AUTH_BASE_URL}/register`,
+    USER_PROFILE: `${AUTH_BASE_URL}/userprofile`,
     // Posts
     POSTS: `${API_BASE_URL}/posts`,
     POST_BY_ID: (id) => `${API_BASE_URL}/posts/${id}`,
