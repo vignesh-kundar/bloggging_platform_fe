@@ -47,7 +47,7 @@ export default function NewPost({ onPublish }) {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title.trim() || !formData.content.trim()) return;
     
@@ -58,7 +58,7 @@ export default function NewPost({ onPublish }) {
 
     setIsSubmitting(true);
     try {
-      onPublish({
+      await onPublish({
         ...formData,
         tags: tags
       });

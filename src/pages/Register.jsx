@@ -65,6 +65,7 @@ export default function Register({ onSwitchToLogin }) {
             <label htmlFor="register-name">Full Name</label>
             <input
               id="register-name"
+              name="name"
               type="text"
               placeholder="John Doe"
               value={name}
@@ -78,6 +79,7 @@ export default function Register({ onSwitchToLogin }) {
             <label htmlFor="register-email">Email</label>
             <input
               id="register-email"
+              name="email"
               type="email"
               placeholder="you@example.com"
               value={email}
@@ -90,6 +92,7 @@ export default function Register({ onSwitchToLogin }) {
             <label htmlFor="register-username">Username</label>
             <input
               id="register-username"
+              name="userName"
               type="text"
               placeholder="johndoe"
               value={userName}
@@ -102,6 +105,7 @@ export default function Register({ onSwitchToLogin }) {
             <label htmlFor="register-password">Password</label>
             <input
               id="register-password"
+              name="password"
               type="password"
               placeholder="••••••••"
               value={password}
