@@ -19,12 +19,26 @@ export function AuthProvider({ children }) {
     try {
       const profile = await authApi.getProfile();
       setUser(prev => {
+        // Keep the seeded avatarUrl — backend returns a generic unseeded URL
         const merged = { ...prev, ...profile };
+        if (profile.avatarUrl && !profile.avatarUrl.includes('?seed=') && prev?.avatarUrl?.includes('?seed=')) {
+          merged.avatarUrl = prev.avatarUrl;
+        }
         sessionStorage.setItem(USER_KEY, JSON.stringify(merged));
         return merged;
       });
     } catch {
       // Profile fetch is best-effort; basic user info from login is sufficient
+    }
+  }, []);
+
+  const decodeJwtPayload = useCallback((token) => {
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) return null;
+      return JSON.parse(atob(parts[1]));
+    } catch {
+      return null;
     }
   }, []);
 
@@ -36,18 +50,21 @@ export function AuthProvider({ children }) {
     sessionStorage.setItem(TOKEN_KEY, tokenStr);
     setToken(tokenStr);
 
-    // Store user info if the response includes it
-    if (data.user || data.name || data.email) {
-      const userInfo = data.user || { name: data.name, email: data.email };
-      sessionStorage.setItem(USER_KEY, JSON.stringify(userInfo));
-      setUser(userInfo);
-    }
+    // Extract user info from response or JWT claims
+    const payload = decodeJwtPayload(tokenStr);
+    const userEmail = data.email || payload?.sub || email;
+    const userName = data.name || payload?.name || userEmail.split('@')[0];
+    const avatarUrl = `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(userEmail)}`;
 
-    // Fetch full profile (avatarUrl, userName) after login
+    const userInfo = { email: userEmail, name: userName, avatarUrl };
+    sessionStorage.setItem(USER_KEY, JSON.stringify(userInfo));
+    setUser(userInfo);
+
+    // Best-effort: try to fetch richer profile from backend
     fetchProfile();
 
     return data;
-  }, [fetchProfile]);
+  }, [fetchProfile, decodeJwtPayload]);
 
   const register = useCallback(async (name, email, userName, password) => {
     const data = await authApi.register(name, email, userName, password);
