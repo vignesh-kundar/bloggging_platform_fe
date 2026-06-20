@@ -1,4 +1,5 @@
 import { API_CONFIG } from '../config/api.config';
+import { apiClient } from './apiClient';
 
 export const authApi = {
   async login(email, password) {
@@ -29,5 +30,9 @@ export const authApi = {
       throw new Error(error.message || 'Registration failed');
     }
     return response.json();
+  },
+
+  getProfile() {
+    return apiClient.get(API_CONFIG.ENDPOINTS.USER_PROFILE);
   },
 };

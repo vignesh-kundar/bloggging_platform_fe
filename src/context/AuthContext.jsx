@@ -15,6 +15,19 @@ export function AuthProvider({ children }) {
 
   const isAuthenticated = !!token;
 
+  const fetchProfile = useCallback(async () => {
+    try {
+      const profile = await authApi.getProfile();
+      setUser(prev => {
+        const merged = { ...prev, ...profile };
+        sessionStorage.setItem(USER_KEY, JSON.stringify(merged));
+        return merged;
+      });
+    } catch {
+      // Profile fetch is best-effort; basic user info from login is sufficient
+    }
+  }, []);
+
   const login = useCallback(async (email, password) => {
     const data = await authApi.login(email, password);
     const jwt = data.token || data.jwt || data.accessToken || data;
@@ -30,8 +43,11 @@ export function AuthProvider({ children }) {
       setUser(userInfo);
     }
 
+    // Fetch full profile (avatarUrl, userName) after login
+    fetchProfile();
+
     return data;
-  }, []);
+  }, [fetchProfile]);
 
   const register = useCallback(async (name, email, userName, password) => {
     const data = await authApi.register(name, email, userName, password);
