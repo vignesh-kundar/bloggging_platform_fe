@@ -1,3 +1,5 @@
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import './Navbar.css';
 
 const BookIcon = () => (
@@ -42,7 +44,38 @@ const LogoutIcon = () => (
   </svg>
 );
 
+const UserIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
 export default function Navbar({ activePage, setActivePage, theme, toggleTheme, onLogout }) {
+  const { user } = useAuth();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const [imgError, setImgError] = useState(false);
+
+  const avatarUrl = user?.avatarUrl;
+  const userName = user?.name || user?.userName || 'User';
+  const userEmail = user?.email || '';
+
+  const handleClickOutside = useCallback((e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setDropdownOpen(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (dropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [dropdownOpen, handleClickOutside]);
+
+  const showAvatar = avatarUrl && !imgError;
+
   return (
     <nav className="navbar neo-out">
       <div className="navbar__logo neo-out" onClick={() => setActivePage('home')}>
@@ -74,18 +107,44 @@ export default function Navbar({ activePage, setActivePage, theme, toggleTheme, 
             About
           </button>
         </li>
-        <li className="navbar__theme-toggle">
-          <button className="theme-toggle neo-btn" onClick={toggleTheme}>
-            {theme === 'light' ? <MoonIcon /> : <SunIcon />}
+        <li className="navbar__avatar-wrapper" ref={dropdownRef}>
+          <button
+            className="navbar__avatar-btn neo-out"
+            onClick={() => setDropdownOpen(prev => !prev)}
+            title={userName}
+          >
+            {showAvatar ? (
+              <img
+                key={avatarUrl}
+                src={avatarUrl}
+                alt={userName}
+                className="navbar__avatar-img"
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <UserIcon />
+            )}
           </button>
+
+          {dropdownOpen && (
+            <div className="user-dropdown neo-out">
+              <div className="user-dropdown__header">
+                <span className="user-dropdown__name">{userName}</span>
+                {userEmail && <span className="user-dropdown__email">{userEmail}</span>}
+              </div>
+              <div className="user-dropdown__divider" />
+              <button className="user-dropdown__item" onClick={toggleTheme}>
+                {theme === 'light' ? <MoonIcon /> : <SunIcon />}
+                <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+              </button>
+              <div className="user-dropdown__divider" />
+              <button className="user-dropdown__item user-dropdown__item--danger" onClick={onLogout}>
+                <LogoutIcon />
+                <span>Logout</span>
+              </button>
+            </div>
+          )}
         </li>
-        {onLogout && (
-          <li className="navbar__theme-toggle">
-            <button className="theme-toggle neo-btn" onClick={onLogout} title="Logout">
-              <LogoutIcon />
-            </button>
-          </li>
-        )}
       </ul>
     </nav>
   );
