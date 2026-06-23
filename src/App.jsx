@@ -76,12 +76,15 @@ function AppContent() {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   }, []);
 
-  const { 
+  const {
     posts,
     loading,
+    loadingMore,
     error,
     searchQuery,
+    hasMore,
     fetchPosts,
+    loadMore,
     setCurrentPost,
     createPost,
     clearError
@@ -154,6 +157,15 @@ function AppContent() {
                     onClick={() => handleViewPost(post)}
                   />
                 ))}
+                {hasMore && (
+                  <button
+                    className="load-more-btn neo-out"
+                    onClick={loadMore}
+                    disabled={loadingMore}
+                  >
+                    {loadingMore ? 'Loading...' : 'Load More'}
+                  </button>
+                )}
               </section>
             )}
           </>

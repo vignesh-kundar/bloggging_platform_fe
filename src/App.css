@@ -31,6 +31,31 @@
   padding: 0 40px;
 }
 
+.load-more-btn {
+  align-self: center;
+  margin-top: 8px;
+  padding: 12px 40px;
+  border: none;
+  border-radius: var(--border-radius-md);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.load-more-btn:hover:not(:disabled) {
+  box-shadow: var(--neo-btn-hover);
+  color: var(--accent);
+}
+
+.load-more-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Empty State */
 .empty-state {
   display: flex;

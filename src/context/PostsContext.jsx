@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { postsApi } from '../services/postsApi';
 
 const PostsContext = createContext(null);
@@ -7,36 +7,54 @@ export function PostsProvider({ children }) {
   const [posts, setPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const searchTermRef = useRef('');
 
-  const fetchPosts = useCallback(async (term = '') => {
-    try {
+  const fetchPosts = useCallback(async (term = '', pageNum = 0, append = false) => {
+    const isNewSearch = !append;
+    if (!isNewSearch) {
+      setLoadingMore(true);
+    } else {
       setLoading(true);
+    }
+
+    try {
       setError(null);
-      const data = term 
-        ? await postsApi.search(term)
-        : await postsApi.getAll();
-      setPosts(data);
+      const res = term
+        ? await postsApi.search(term, pageNum)
+        : await postsApi.getAll(pageNum);
+      const newPosts = res.content || [];
+      setPosts(prev => isNewSearch ? newPosts : [...prev, ...newPosts]);
+      setHasMore(!res.last);
+      setPage(pageNum);
+      searchTermRef.current = term;
     } catch (err) {
       setError(err.message || 'Failed to load posts');
-      setPosts([]);
+      if (isNewSearch) setPosts([]);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   }, []);
 
+  const loadMore = useCallback(() => {
+    if (!loadingMore && hasMore) {
+      fetchPosts(searchTermRef.current, page + 1, true);
+    }
+  }, [fetchPosts, loadingMore, hasMore, page]);
+
   const fetchPostById = useCallback(async (id) => {
     try {
-      setLoading(true);
       setError(null);
       const data = await postsApi.getById(id);
       setCurrentPost(data);
     } catch (err) {
       setError(err.message || 'Failed to load post');
       setCurrentPost(null);
-    } finally {
-      setLoading(false);
     }
   }, []);
 
@@ -68,7 +86,7 @@ export function PostsProvider({ children }) {
 
   const search = useCallback((term) => {
     setSearchQuery(term);
-    fetchPosts(term);
+    fetchPosts(term, 0, false);
   }, [fetchPosts]);
 
   useEffect(() => {
@@ -81,27 +99,33 @@ export function PostsProvider({ children }) {
     posts,
     currentPost,
     loading,
+    loadingMore,
     error,
     searchQuery,
+    hasMore,
     setCurrentPost,
     fetchPosts,
+    loadMore,
     fetchPostById,
     createPost,
     deletePost,
     search,
     clearError
   }), [
-    posts, 
-    currentPost, 
-    loading, 
-    error, 
-    searchQuery, 
-    setCurrentPost, 
-    fetchPosts, 
-    fetchPostById, 
-    createPost, 
-    deletePost, 
-    search, 
+    posts,
+    currentPost,
+    loading,
+    loadingMore,
+    error,
+    searchQuery,
+    hasMore,
+    setCurrentPost,
+    fetchPosts,
+    loadMore,
+    fetchPostById,
+    createPost,
+    deletePost,
+    search,
     clearError
   ]);
 
