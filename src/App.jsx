@@ -64,7 +64,7 @@ function AuthGate() {
 function AppContent() {
   const [activePage, setActivePage] = useState('home');
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
-  const { showNotification, confirmAction } = useNotification();
+  const { showNotification } = useNotification();
   const { isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
@@ -77,15 +77,14 @@ function AppContent() {
   }, []);
 
   const { 
-    posts, 
-    loading, 
-    error, 
-    searchQuery, 
+    posts,
+    loading,
+    error,
+    searchQuery,
     fetchPosts,
-    deletePost,
     setCurrentPost,
     createPost,
-    clearError 
+    clearError
   } = usePosts();
 
   const handleSearch = useCallback((term) => {
@@ -104,20 +103,6 @@ function AppContent() {
       showNotification('Failed to publish post: ' + err.message, 'error');
     }
   }, [createPost, showNotification]);
-
-  const handleDelete = useCallback(async (id) => {
-    confirmAction('Are you sure you want to delete this post?', async () => {
-      try {
-        await deletePost(id);
-        showNotification('Post deleted successfully', 'success');
-        if (activePage === 'post') {
-          setActivePage('home');
-        }
-      } catch (err) {
-        showNotification('Failed to delete post: ' + err.message, 'error');
-      }
-    });
-  }, [deletePost, activePage, showNotification, confirmAction]);
 
   const handleViewPost = useCallback((post) => {
     setCurrentPost(post);
@@ -161,12 +146,11 @@ function AppContent() {
             ) : posts.length === 0 ? (
               <EmptyState query={searchQuery} />
             ) : (
-              <section className="blog-grid">
+              <section className="blog-list">
                 {posts.map((post) => (
                   <PostCard 
                     key={post.id} 
                     post={post} 
-                    onDelete={() => handleDelete(post.id)}
                     onClick={() => handleViewPost(post)}
                   />
                 ))}
