@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { usePosts } from '../context/PostsContext';
 import './PostDetail.css';
 
@@ -24,12 +25,23 @@ const CalendarIcon = () => (
   </svg>
 );
 
+const UserIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
 export default function PostDetail({ onBack }) {
   const { currentPost } = usePosts();
+  const [imgError, setImgError] = useState(false);
   
   if (!currentPost) return <div className="loading-state">Loading post...</div>;
 
-  const { title, content, tags = [], createdAt, updatedAt } = currentPost;
+  const { title, content, tags = [], createdAt, updatedAt, author, avatarUrl } = currentPost;
+  const authorAvatarSrc = avatarUrl && !imgError && author
+    ? `${avatarUrl}?seed=${encodeURIComponent(author)}`
+    : null;
 
   const formatDate = (dateStr) => {
     if (!dateStr) return 'N/A';
@@ -68,9 +80,26 @@ export default function PostDetail({ onBack }) {
             ))}
           </div>
           <h1 className="post-detail__title">{title}</h1>
-          <div className="post-detail__meta">
-            <CalendarIcon />
-            <span>Created: {formatDate(createdAt)}</span>
+          <div className="post-detail__meta-row">
+            <div className="post-detail__author">
+              <div className="post-detail__author-avatar">
+                {authorAvatarSrc ? (
+                  <img
+                    src={authorAvatarSrc}
+                    alt={author}
+                    onError={() => setImgError(true)}
+                  />
+                ) : (
+                  <UserIcon />
+                )}
+              </div>
+              <span className="post-detail__author-name">{author}</span>
+            </div>
+            <span className="post-detail__meta-sep">·</span>
+            <div className="post-detail__meta">
+              <CalendarIcon />
+              <span>{formatDate(createdAt)}</span>
+            </div>
           </div>
         </div>
 
