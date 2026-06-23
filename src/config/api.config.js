@@ -1,5 +1,5 @@
 const BASE_URL = 'https://p01--bloggingplatform--d7td8tlbgkrw.code.run'
-const API_BASE_URL = `${BASE_URL}/api/v1`
+const API_BASE_URL = `${BASE_URL}/api/v2`
 const AUTH_BASE_URL = `${BASE_URL}/api/auth`
 
 export const API_CONFIG = {
@@ -23,3 +23,4 @@ export const API_CONFIG = {
     PATCH: 'PATCH'
   }
 };
+  
