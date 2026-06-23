@@ -36,6 +36,18 @@ export default function PostCard({ post, onClick }) {
 
   return (
     <article className="post-card neo-out" onClick={onClick}>
+      <div className="post-card__row">
+        <div className="post-card__body">
+          <h2 className="post-card__title">{title}</h2>
+          <p className="post-card__excerpt">{excerpt}</p>
+        </div>
+        <div className="post-card__footer">
+          <div className="post-card__meta">
+            <CalendarIcon />
+            <time>{displayDate}</time>
+          </div>
+        </div>
+      </div>
       <div className="post-card__tags">
         {visibleTags.map((tag, index) => (
           <span key={`${tag}-${index}`} className="post-card__tag">
@@ -45,16 +57,6 @@ export default function PostCard({ post, onClick }) {
         {extraCount > 0 && (
           <span className="post-card__tag post-card__tag--extra">+{extraCount}</span>
         )}
-      </div>
-      <div className="post-card__body">
-        <h2 className="post-card__title">{title}</h2>
-        <p className="post-card__excerpt">{excerpt}</p>
-      </div>
-      <div className="post-card__footer">
-        <div className="post-card__meta">
-          <CalendarIcon />
-          <time>{displayDate}</time>
-        </div>
       </div>
     </article>
   );
