@@ -221,6 +221,18 @@
   background: rgba(255, 95, 95, 0.08);
 }
 
+.navbar__login-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.navbar__login-btn:hover {
+  color: var(--accent-hover) !important;
+}
+
 @media (max-width: 600px) {
   .navbar {
     padding: 14px 20px;

@@ -51,8 +51,16 @@ const UserIcon = () => (
   </svg>
 );
 
-export default function Navbar({ activePage, setActivePage, theme, toggleTheme, onLogout }) {
-  const { user } = useAuth();
+const LoginIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+    <polyline points="10 17 15 12 10 7" />
+    <line x1="15" y1="12" x2="3" y2="12" />
+  </svg>
+);
+
+export default function Navbar({ activePage, setActivePage, requireAuth, theme, toggleTheme, onLogout }) {
+  const { user, isAuthenticated } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [imgError, setImgError] = useState(false);
@@ -74,6 +82,14 @@ export default function Navbar({ activePage, setActivePage, theme, toggleTheme, 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [dropdownOpen, handleClickOutside]);
 
+  const handleNewPost = useCallback(() => {
+    if (!isAuthenticated) {
+      requireAuth();
+    } else {
+      setActivePage('new');
+    }
+  }, [isAuthenticated, requireAuth, setActivePage]);
+
   const showAvatar = avatarUrl && !imgError;
 
   return (
@@ -94,7 +110,7 @@ export default function Navbar({ activePage, setActivePage, theme, toggleTheme, 
         <li>
           <button
             className={`nav-link nav-link--new ${activePage === 'new' ? 'nav-link--active' : ''}`}
-            onClick={() => setActivePage('new')}
+            onClick={handleNewPost}
           >
             <PlusIcon /> New Post
           </button>
@@ -108,41 +124,48 @@ export default function Navbar({ activePage, setActivePage, theme, toggleTheme, 
           </button>
         </li>
         <li className="navbar__avatar-wrapper" ref={dropdownRef}>
-          <button
-            className="navbar__avatar-btn neo-out"
-            onClick={() => setDropdownOpen(prev => !prev)}
-            title={userName}
-          >
-            {showAvatar ? (
-              <img
-                key={avatarUrl}
-                src={avatarUrl}
-                alt={userName}
-                className="navbar__avatar-img"
-                onError={() => setImgError(true)}
-              />
-            ) : (
-              <UserIcon />
-            )}
-          </button>
-
-          {dropdownOpen && (
-            <div className="user-dropdown neo-out">
-              <div className="user-dropdown__header">
-                <span className="user-dropdown__name">{userName}</span>
-                {userEmail && <span className="user-dropdown__email">{userEmail}</span>}
-              </div>
-              <div className="user-dropdown__divider" />
-              <button className="user-dropdown__item" onClick={toggleTheme}>
-                {theme === 'light' ? <MoonIcon /> : <SunIcon />}
-                <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+          {isAuthenticated ? (
+            <>
+              <button
+                className="navbar__avatar-btn neo-out"
+                onClick={() => setDropdownOpen(prev => !prev)}
+                title={userName}
+              >
+                {showAvatar ? (
+                  <img
+                    key={avatarUrl}
+                    src={avatarUrl}
+                    alt={userName}
+                    className="navbar__avatar-img"
+                    onError={() => setImgError(true)}
+                  />
+                ) : (
+                  <UserIcon />
+                )}
               </button>
-              <div className="user-dropdown__divider" />
-              <button className="user-dropdown__item user-dropdown__item--danger" onClick={onLogout}>
-                <LogoutIcon />
-                <span>Logout</span>
-              </button>
-            </div>
+              {dropdownOpen && (
+                <div className="user-dropdown neo-out">
+                  <div className="user-dropdown__header">
+                    <span className="user-dropdown__name">{userName}</span>
+                    {userEmail && <span className="user-dropdown__email">{userEmail}</span>}
+                  </div>
+                  <div className="user-dropdown__divider" />
+                  <button className="user-dropdown__item" onClick={toggleTheme}>
+                    {theme === 'light' ? <MoonIcon /> : <SunIcon />}
+                    <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+                  </button>
+                  <div className="user-dropdown__divider" />
+                  <button className="user-dropdown__item user-dropdown__item--danger" onClick={onLogout}>
+                    <LogoutIcon />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <button className="nav-link navbar__login-btn" onClick={() => requireAuth()}>
+              <LoginIcon /> Sign In
+            </button>
           )}
         </li>
       </ul>
