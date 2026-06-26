@@ -119,10 +119,117 @@
 }
 
 /* Responsive */
+/* ── Banner ── */
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 40px 20px;
+  padding: 14px 20px;
+  border-radius: var(--border-radius-md);
+  background: var(--bg-card);
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  animation: bannerFadeIn 0.3s ease;
+}
+
+@keyframes bannerFadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.banner__link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent);
+  font-weight: 600;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.banner__link:hover {
+  color: var(--accent-hover);
+}
+
+.banner__close {
+  background: none;
+  border: none;
+  padding: 0 4px;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.banner__close:hover {
+  color: var(--text-h);
+}
+
+/* ── Auth Modal ── */
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  animation: overlayFadeIn 0.2s ease;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.auth-overlay__card {
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.auth-overlay__card .auth-page {
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.auth-overlay__card .auth-card {
+  animation: none;
+}
+
+.auth-overlay__close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 10;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.auth-overlay__close:hover {
+  color: var(--text-h);
+}
+
 @media (max-width: 768px) {
   .blog-list {
     padding: 0 20px;
     gap: 14px;
+  }
+
+  .banner {
+    margin: 0 20px 16px;
   }
 }
 
@@ -130,6 +237,11 @@
   .blog-list {
     padding: 0 14px;
     gap: 12px;
+  }
+
+  .banner {
+    margin: 0 14px 14px;
+    flex-wrap: wrap;
   }
 
   .app__main {

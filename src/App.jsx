@@ -41,29 +41,37 @@ function ErrorDisplay({ message, onRetry }) {
   );
 }
 
-function AuthGate() {
-  const [authPage, setAuthPage] = useState('login');
+function AuthModal({ mode, onClose, onSwitch }) {
   const { showNotification } = useNotification();
 
   const handleSwitchToRegister = useCallback(() => {
-    setAuthPage('register');
-  }, []);
+    onSwitch('register');
+  }, [onSwitch]);
 
   const handleSwitchToLogin = useCallback(() => {
     showNotification('Account created! Please sign in.', 'success');
-    setAuthPage('login');
-  }, [showNotification]);
+    onSwitch('login');
+  }, [showNotification, onSwitch]);
 
-  if (authPage === 'register') {
-    return <Register onSwitchToLogin={handleSwitchToLogin} />;
-  }
-
-  return <Login onSwitchToRegister={handleSwitchToRegister} />;
+  return (
+    <div className="auth-overlay" onClick={onClose}>
+      <div className="auth-overlay__card" onClick={e => e.stopPropagation()}>
+        <button className="auth-overlay__close" onClick={onClose}>&times;</button>
+        {mode === 'register' ? (
+          <Register onSwitchToLogin={handleSwitchToLogin} />
+        ) : (
+          <Login onSwitchToRegister={handleSwitchToRegister} />
+        )}
+      </div>
+    </div>
+  );
 }
 
 function AppContent() {
   const [activePage, setActivePage] = useState('home');
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+  const [authModal, setAuthModal] = useState(null);
+  const [showBanner, setShowBanner] = useState(true);
   const { showNotification } = useNotification();
   const { isAuthenticated, logout } = useAuth();
 
@@ -90,6 +98,10 @@ function AppContent() {
     clearError
   } = usePosts();
 
+  const requireAuth = useCallback((mode = 'login') => {
+    if (!isAuthenticated) setAuthModal(mode);
+  }, [isAuthenticated]);
+
   const handleSearch = useCallback((term) => {
     clearError();
     setActivePage('home');
@@ -115,25 +127,27 @@ function AppContent() {
 
   const handleNavigate = useCallback((page) => {
     clearError();
+    if (!isAuthenticated && page === 'new') {
+      requireAuth();
+      return;
+    }
     setActivePage(page);
     window.scrollTo({ top: 0, behavior: 'auto' });
-  }, [clearError]);
+  }, [clearError, isAuthenticated, requireAuth]);
 
   const handleLogout = useCallback(() => {
     logout();
     showNotification('Logged out successfully', 'info');
   }, [logout, showNotification]);
 
-  // If not authenticated, show login/register
-  if (!isAuthenticated) {
-    return <AuthGate />;
-  }
+  const dismissBanner = useCallback(() => setShowBanner(false), []);
 
   return (
     <div className="app">
       <Navbar 
         activePage={activePage} 
-        setActivePage={handleNavigate} 
+        setActivePage={handleNavigate}
+        requireAuth={requireAuth}
         theme={theme}
         toggleTheme={toggleTheme}
         onLogout={handleLogout}
@@ -141,6 +155,17 @@ function AppContent() {
       <main className="app__main">
         {activePage === 'home' && (
           <>
+            {!isAuthenticated && showBanner && (
+              <div className="banner neo-out">
+                <span>You&apos;re not logged in.&nbsp;
+                  <button className="banner__link" onClick={() => requireAuth('login')}>Sign in</button>
+                  &nbsp;or&nbsp;
+                  <button className="banner__link" onClick={() => requireAuth('register')}>Create an account</button>
+                  &nbsp;to start writing.
+                </span>
+                <button className="banner__close" onClick={dismissBanner}>&times;</button>
+              </div>
+            )}
             <Hero onSearch={handleSearch} />
             {loading ? (
               <div className="loading-state">Loading posts...</div>
@@ -175,7 +200,7 @@ function AppContent() {
           <PostDetail onBack={() => handleNavigate('home')} />
         )}
         
-        {activePage === 'new' && (
+        {activePage === 'new' && isAuthenticated && (
           <NewPost onPublish={handlePublish} />
         )}
 
@@ -189,6 +214,14 @@ function AppContent() {
           <a href="https://vigneshkundar.vercel.app" target="_blank" rel="noopener noreferrer">Vignesh Kundar</a>
         </p>
       </footer>
+
+      {authModal && !isAuthenticated && (
+        <AuthModal
+          mode={authModal}
+          onClose={() => setAuthModal(null)}
+          onSwitch={setAuthModal}
+        />
+      )}
     </div>
   );
 }
