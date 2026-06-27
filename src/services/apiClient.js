@@ -8,8 +8,8 @@
  *   AuthContext can react and redirect the user back to the login page.
  */
 
-const TOKEN_KEY = 'blogify_auth_token';
-const USER_KEY  = 'blogify_auth_user';
+const TOKEN_KEY = 'bloogigy_auth_token';
+const USER_KEY  = 'bloogigy_auth_user';
 
 async function request(url, options = {}) {
   const token = sessionStorage.getItem(TOKEN_KEY);

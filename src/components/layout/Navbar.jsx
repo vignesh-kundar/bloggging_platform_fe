@@ -61,7 +61,7 @@ export default function Navbar({ activePage, setActivePage, requireAuth, theme, 
     <nav className="navbar">
       <div className="navbar__inner">
         <button className="navbar__logo" onClick={() => handleNavigate('home')}>
-          Blogify
+          Bloogigy
         </button>
 
         <button className="navbar__mobile-toggle" onClick={() => setMobileMenuOpen(prev => !prev)}>

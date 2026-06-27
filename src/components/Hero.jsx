@@ -29,7 +29,7 @@ export default function Hero({ onSearch }) {
   return (
     <section className="hero">
       <div className="hero__inner">
-        <h1 className="hero__title">Blogify</h1>
+        <h1 className="hero__title">Bloogigy</h1>
         <p className="hero__subtitle">
           A mindful space for thoughtful writing, quiet reflections, and stories that linger.
         </p>
