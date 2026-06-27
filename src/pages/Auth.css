@@ -1,58 +1,42 @@
-/* ── Auth Pages (Login / Register) ── */
 .auth-page {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   padding: 40px 20px;
-  background-color: var(--bg);
 }
 
 .auth-card {
   width: 100%;
-  max-width: 440px;
+  max-width: 400px;
   padding: 48px 40px;
-  border-radius: var(--border-radius-xl);
-  background-color: var(--bg-card);
-  box-shadow: var(--neo-out);
-  animation: authFadeIn 0.5s ease;
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  animation: authFadeIn 0.4s ease;
 }
 
 @keyframes authFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.auth-card__logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 8px;
-  color: var(--text-h);
-  font-size: 1.5rem;
-  font-weight: 700;
-  cursor: default;
-}
-
-.auth-card__logo svg {
-  color: var(--accent);
+.auth-card__title {
+  font-family: var(--font-headline);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
 }
 
 .auth-card__subtitle {
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 0.88rem;
-  margin-bottom: 36px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--ink-muted);
+  margin-bottom: 32px;
+  line-height: 1.5;
 }
 
-/* ── Form ── */
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -66,70 +50,59 @@
 }
 
 .auth-field label {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  letter-spacing: 0.02em;
 }
 
 .auth-field input {
-  padding: 14px 16px;
+  padding: 12px 0;
   border: none;
-  border-radius: var(--border-radius-md);
-  background-color: var(--bg-card);
-  box-shadow: var(--neo-in);
-  color: var(--text-primary);
-  font-size: 0.92rem;
-  font-family: inherit;
+  border-bottom: 0.5px solid var(--ink-border-light);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
   outline: none;
-  transition: box-shadow var(--transition);
+  transition: border-color var(--transition);
 }
 
 .auth-field input:focus {
-  box-shadow: var(--neo-in), 0 0 0 2px var(--accent-glow);
+  border-bottom-color: var(--ink);
 }
 
 .auth-field input::placeholder {
-  color: var(--text-muted);
-  opacity: 0.6;
+  color: var(--ink-muted);
+  opacity: 0.4;
 }
 
-/* ── Submit Button ── */
 .auth-submit {
-  margin-top: 8px;
+  margin-top: 12px;
   padding: 14px;
-  border: none;
-  border-radius: var(--border-radius-md);
-  background-color: var(--accent);
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 600;
-  font-family: inherit;
+  border: 0.5px solid var(--ink-navy-container);
+  border-radius: var(--radius-md);
+  background: var(--ink-navy-container);
+  color: var(--paper-bright);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
   cursor: pointer;
-  box-shadow: var(--neo-btn);
   transition: all var(--transition);
   position: relative;
-  overflow: hidden;
 }
 
 .auth-submit:hover:not(:disabled) {
-  background-color: var(--accent-hover);
-  box-shadow: var(--neo-btn-hover);
-  transform: translateY(-1px);
-}
-
-.auth-submit:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: var(--neo-in);
+  opacity: 0.9;
 }
 
 .auth-submit:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Loading spinner inside button */
 .auth-submit--loading {
   color: transparent;
 }
@@ -139,10 +112,10 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 20px;
-  height: 20px;
-  margin: -10px 0 0 -10px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   border-top-color: #fff;
   border-radius: 50%;
   animation: authSpin 0.6s linear infinite;
@@ -152,71 +125,47 @@
   to { transform: rotate(360deg); }
 }
 
-/* ── Error Message ── */
 .auth-error {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  border-radius: var(--border-radius-sm);
-  background-color: rgba(255, 95, 95, 0.08);
-  color: #ff5f5f;
-  font-size: 0.85rem;
+  padding: 10px 0;
+  color: var(--oxblood-container);
+  font-family: var(--font-ui);
+  font-size: 13px;
   font-weight: 500;
   animation: authShake 0.4s ease;
 }
 
 @keyframes authShake {
   0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-6px); }
-  40% { transform: translateX(6px); }
-  60% { transform: translateX(-4px); }
-  80% { transform: translateX(4px); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
 }
 
-.auth-error__icon {
-  flex-shrink: 0;
-  font-size: 1rem;
-}
-
-/* ── Switch Link ── */
 .auth-switch {
   text-align: center;
   margin-top: 28px;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--ink-muted);
 }
 
 .auth-switch button {
-  background: none;
-  border: none;
-  color: var(--accent);
-  font-weight: 600;
-  font-size: 0.85rem;
-  font-family: inherit;
+  color: var(--ink-navy-container);
+  font-weight: 500;
+  font-size: 13px;
   cursor: pointer;
-  padding: 0;
-  margin-left: 4px;
-  transition: opacity var(--transition);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.2s;
 }
 
 .auth-switch button:hover {
-  opacity: 0.8;
-  text-decoration: underline;
+  opacity: 0.7;
 }
 
-/* ── Responsive ── */
 @media (max-width: 480px) {
   .auth-card {
     padding: 36px 24px;
-    border-radius: var(--border-radius-lg);
-  }
-
-  .auth-card__logo {
-    font-size: 1.3rem;
-  }
-
-  .auth-card__subtitle {
-    margin-bottom: 28px;
   }
 }

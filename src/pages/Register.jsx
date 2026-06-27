@@ -2,13 +2,6 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
 
-const BookIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-  </svg>
-);
-
 export default function Register({ onSwitchToLogin }) {
   const { register } = useAuth();
   const [name, setName] = useState('');
@@ -35,7 +28,6 @@ export default function Register({ onSwitchToLogin }) {
     try {
       setLoading(true);
       await register(name.trim(), email.trim(), userName.trim(), password);
-      // Redirect to login after successful registration
       onSwitchToLogin();
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.');
@@ -47,18 +39,12 @@ export default function Register({ onSwitchToLogin }) {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-card__logo">
-          <BookIcon />
-          <span>Blogify</span>
-        </div>
-        <p className="auth-card__subtitle">Create your account to start writing</p>
+        <h1 className="auth-card__title">Create Account</h1>
+        <p className="auth-card__subtitle">Create your account and start writing.</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           {error && (
-            <div className="auth-error">
-              <span className="auth-error__icon">⚠️</span>
-              <span>{error}</span>
-            </div>
+            <div className="auth-error">{error}</div>
           )}
 
           <div className="auth-field">
@@ -107,7 +93,7 @@ export default function Register({ onSwitchToLogin }) {
               id="register-password"
               name="password"
               type="password"
-              placeholder="••••••••"
+              placeholder="At least 6 characters"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
@@ -119,12 +105,12 @@ export default function Register({ onSwitchToLogin }) {
             className={`auth-submit ${loading ? 'auth-submit--loading' : ''}`}
             disabled={loading}
           >
-            Create Account
+            {loading ? 'Creating account…' : 'Create Account'}
           </button>
         </form>
 
         <div className="auth-switch">
-          Already have an account?
+          Already have an account?{' '}
           <button onClick={onSwitchToLogin}>Sign in</button>
         </div>
       </div>

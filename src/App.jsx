@@ -18,7 +18,7 @@ function EmptyState({ query }) {
       <div className="empty-state__icon">📝</div>
       <h3>No posts found</h3>
       {query ? (
-        <p>No posts matched &ldquo;{query}&rdquo;. Try a different search.</p>
+        <p>Nothing matched &ldquo;{query}&rdquo;. Try a different search.</p>
       ) : (
         <p>Be the first to create a post!</p>
       )}
@@ -29,7 +29,6 @@ function EmptyState({ query }) {
 function ErrorDisplay({ message, onRetry }) {
   return (
     <div className="error-state">
-      <div className="error-state__icon">⚠️</div>
       <h3>Something went wrong</h3>
       <p>{message}</p>
       {onRetry && (
@@ -137,7 +136,7 @@ function AppContent() {
 
   const handleLogout = useCallback(() => {
     logout();
-    showNotification('Logged out successfully', 'info');
+    showNotification('Signed out successfully.', 'info');
   }, [logout, showNotification]);
 
   const dismissBanner = useCallback(() => setShowBanner(false), []);
@@ -156,11 +155,11 @@ function AppContent() {
         {activePage === 'home' && (
           <>
             {!isAuthenticated && showBanner && (
-              <div className="banner neo-out">
-                <span>You&apos;re not logged in.&nbsp;
+              <div className="banner">
+                <span>
                   <button className="banner__link" onClick={() => requireAuth('login')}>Sign in</button>
                   &nbsp;or&nbsp;
-                  <button className="banner__link" onClick={() => requireAuth('register')}>Create an account</button>
+                  <button className="banner__link" onClick={() => requireAuth('register')}>create an account</button>
                   &nbsp;to start writing.
                 </span>
                 <button className="banner__close" onClick={dismissBanner}>&times;</button>
@@ -168,13 +167,13 @@ function AppContent() {
             )}
             <Hero onSearch={handleSearch} />
             {loading ? (
-              <div className="loading-state">Loading posts...</div>
+              <div className="loading-state">Loading posts…</div>
             ) : error ? (
               <ErrorDisplay message={error} onRetry={() => fetchPosts(searchQuery)} />
             ) : posts.length === 0 ? (
               <EmptyState query={searchQuery} />
             ) : (
-              <section className="blog-list">
+              <section className="journal">
                 {posts.map((post) => (
                   <PostCard 
                     key={post.id} 
@@ -182,16 +181,18 @@ function AppContent() {
                     onClick={() => handleViewPost(post)}
                   />
                 ))}
-                {hasMore && (
-                  <button
-                    className="load-more-btn neo-out"
-                    onClick={loadMore}
-                    disabled={loadingMore}
-                  >
-                    {loadingMore ? 'Loading...' : 'Load More'}
-                  </button>
-                )}
               </section>
+            )}
+            {hasMore && (
+              <div className="load-more-wrapper">
+                <button
+                  className="load-more-btn"
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                >
+                  {loadingMore ? 'Loading…' : 'Load More'}
+                </button>
+              </div>
             )}
           </>
         )}
@@ -237,4 +238,3 @@ export default function App() {
     </NotificationProvider>
   );
 }
-
