@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -7,73 +5,80 @@
 }
 
 :root {
-  /* Base colors */
-  --bg:           #edf1f7;
-  --bg-surface:   #f0f4f8;
-  --bg-card:      #edf1f7;
+  --paper: #fbf9f4;
+  --paper-dim: #dbdad5;
+  --paper-bright: #fbf9f4;
+  --paper-lowest: #ffffff;
+  --paper-low: #f5f3ee;
+  --paper-container: #f0eee9;
+  --paper-high: #eae8e3;
+  --paper-highest: #e4e2dd;
+  --ink: #1b1c19;
+  --ink-muted: #44474c;
+  --ink-border: #74777d;
+  --ink-border-light: #c4c6cc;
+  --ink-navy: #041525;
+  --ink-navy-container: #1a2a3a;
+  --ink-navy-muted: #8191a5;
+  --leaf: #506354;
+  --leaf-container: #d0e5d2;
+  --leaf-on-container: #546758;
+  --oxblood: #530d11;
+  --oxblood-container: #d7726f;
+  --error: #ba1a1a;
+  --error-container: #ffdad6;
 
-  /* Neomorphic shadows (light source from top-left) */
-  --shadow-out-light: #ffffff;
-  --shadow-out-dark:  #d1d9e6;
-  --shadow-in-light:  #ffffff;
-  --shadow-in-dark:   #d1d1e0;
+  --font-headline: 'Playfair Display', Georgia, serif;
+  --font-body: 'EB Garamond', Georgia, serif;
+  --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Neomorphism presets */
-  --neo-out:  8px 8px 16px var(--shadow-out-dark), -8px -8px 16px var(--shadow-out-light);
-  --neo-in:   inset 6px 6px 12px var(--shadow-in-dark), inset -6px -6px 12px var(--shadow-in-light);
-  --neo-btn:  5px 5px 10px var(--shadow-out-dark), -5px -5px 10px var(--shadow-out-light);
-  --neo-btn-hover: 2px 2px 5px var(--shadow-out-dark), -2px -2px 5px var(--shadow-out-light);
-  --neo-tag:  3px 3px 6px var(--shadow-out-dark), -3px -3px 6px var(--shadow-out-light);
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
 
-  /* Accent - Teal/Cyan from favicon */
-  --accent:       #2c8a8a;
-  --accent-hover: #36a3a3;
-  --accent-glow:  rgba(44, 138, 138, 0.15);
+  --shadow-page: 0 20px 40px -5px rgba(0, 0, 0, 0.03), 0 1px 0 0 rgba(0, 0, 0, 0.05);
+  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.08), 0 1px 0 0 rgba(0, 0, 0, 0.05);
+  --border-subtle: 0.5px solid rgba(0, 0, 0, 0.08);
 
-  /* Primary branding */
-  --primary:      var(--accent);
-
-  /* Text */
-  --text-h:       #1a202c;
-  --text-primary: #2d3748;
-  --text-muted:   #718096;
-  --text-tag:     #4a5568;
-
-  /* Misc */
-  --border-radius-sm:  8px;
-  --border-radius-md:  14px;
-  --border-radius-lg:  20px;
-  --border-radius-xl:  28px;
-  --transition:        0.25s ease;
+  --transition: 0.25s ease;
 }
 
 [data-theme='dark'] {
-  /* Base colors - Dark Mode */
-  --bg:           #1a1b26;
-  --bg-surface:   #1f202e;
-  --bg-card:      #1a1b26;
+  --paper: #121417;
+  --paper-dim: #0d0f12;
+  --paper-bright: #1a1d23;
+  --paper-lowest: #080a0d;
+  --paper-low: #16191e;
+  --paper-container: #1a1d23;
+  --paper-high: #1e2128;
+  --paper-highest: #23262d;
+  --ink: #e3e1dc;
+  --ink-muted: #989ba0;
+  --ink-border: #7a7d82;
+  --ink-border-light: #45484d;
+  --ink-navy: #b7c8dd;
+  --ink-navy-container: #1e2e3e;
+  --ink-navy-muted: #8191a5;
+  --leaf: #b7ccb9;
+  --leaf-container: #1a2f1c;
+  --leaf-on-container: #b7ccb9;
+  --oxblood: #ffb3af;
+  --oxblood-container: #3a0508;
+  --error: #ffb4ab;
+  --error-container: #93000a;
 
-  /* Neomorphic shadows - Dark Mode */
-  --shadow-out-light: rgba(255, 255, 255, 0.03);
-  --shadow-out-dark:  rgba(0, 0, 0, 0.45);
-  --shadow-in-light:  rgba(255, 255, 255, 0.02);
-  --shadow-in-dark:   rgba(0, 0, 0, 0.35);
-
-  /* Text - Dark Mode */
-  --text-h:       #f8fafc;
-  --text-primary: #cbd5e1;
-  --text-muted:   #64748b;
-  --text-tag:     #94a3b8;
-
-  /* Accent - Keep Teal/Cyan */
-  --accent-glow:  rgba(44, 138, 138, 0.25);
+  --shadow-page: 0 20px 40px -5px rgba(0, 0, 0, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.03);
+  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.3), 0 1px 0 0 rgba(255, 255, 255, 0.03);
+  --border-subtle: 0.5px solid rgba(255, 255, 255, 0.06);
 }
 
 html, body, #root {
   min-height: 100vh;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--bg);
-  color: var(--text-primary);
+  font-family: var(--font-body);
+  background-color: var(--paper);
+  color: var(--ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -92,4 +97,9 @@ button {
 
 ul {
   list-style: none;
+}
+
+::selection {
+  background: var(--ink-navy-container);
+  color: var(--paper-bright);
 }

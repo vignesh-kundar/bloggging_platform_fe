@@ -2,13 +2,6 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
 
-const BookIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-  </svg>
-);
-
 export default function Login({ onSwitchToRegister }) {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
@@ -29,7 +22,7 @@ export default function Login({ onSwitchToRegister }) {
       setLoading(true);
       await login(email.trim(), password);
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.');
+      setError(err.message || 'Sign in failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -38,18 +31,12 @@ export default function Login({ onSwitchToRegister }) {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-card__logo">
-          <BookIcon />
-          <span>Blogify</span>
-        </div>
-        <p className="auth-card__subtitle">Welcome back — sign in to continue</p>
+        <h1 className="auth-card__title">Sign In</h1>
+        <p className="auth-card__subtitle">Welcome back to Blogify.</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           {error && (
-            <div className="auth-error">
-              <span className="auth-error__icon">⚠️</span>
-              <span>{error}</span>
-            </div>
+            <div className="auth-error">{error}</div>
           )}
 
           <div className="auth-field">
@@ -72,7 +59,7 @@ export default function Login({ onSwitchToRegister }) {
               id="login-password"
               name="password"
               type="password"
-              placeholder="••••••••"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
@@ -84,12 +71,12 @@ export default function Login({ onSwitchToRegister }) {
             className={`auth-submit ${loading ? 'auth-submit--loading' : ''}`}
             disabled={loading}
           >
-            Sign In
+            {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
 
         <div className="auth-switch">
-          Don&apos;t have an account?
+          Don&apos;t have an account?{' '}
           <button onClick={onSwitchToRegister}>Create one</button>
         </div>
       </div>
