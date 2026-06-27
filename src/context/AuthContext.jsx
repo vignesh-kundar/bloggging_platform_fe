@@ -3,8 +3,8 @@ import { authApi } from '../services/authApi';
 
 const AuthContext = createContext(null);
 
-const TOKEN_KEY = 'blogify_auth_token';
-const USER_KEY  = 'blogify_auth_user';
+const TOKEN_KEY = 'bloogigy_auth_token';
+const USER_KEY  = 'bloogigy_auth_user';
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => sessionStorage.getItem(TOKEN_KEY));

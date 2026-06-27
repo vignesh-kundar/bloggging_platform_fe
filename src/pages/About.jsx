@@ -4,7 +4,7 @@ export default function About() {
   return (
     <div className="about">
       <section className="about__hero">
-        <h1 className="about__title">About Blogify</h1>
+        <h1 className="about__title">About Bloogigy</h1>
         <p className="about__subtitle">
           A quiet corner of the internet dedicated to thoughtful writing and meaningful ideas.
         </p>
@@ -14,7 +14,7 @@ export default function About() {
         <h2>Our Mission</h2>
         <p>
           In a world of constant noise and distraction, we believe in the power of focused, intentional content.
-          Blogify was created to provide a calm, beautiful space where writers can share their thoughts
+          Bloogigy was created to provide a calm, beautiful space where writers can share their thoughts
           and readers can engage deeply with ideas that matter.
         </p>
         <p>
@@ -51,7 +51,7 @@ export default function About() {
       <section className="about__section">
         <h2>The Story</h2>
         <p>
-          Blogify began as a simple idea: what if we could create a blog platform that felt like
+          Bloogigy began as a simple idea: what if we could create a blog platform that felt like
           holding a well-crafted book? A space that invited contemplation rather than quick scrolling?
         </p>
         <p>
@@ -60,7 +60,7 @@ export default function About() {
           interface that feels tangible and calm. Every element is designed to honor the written word.
         </p>
         <p>
-          Today, Blogify serves as a home for writers who value quality over quantity, and readers
+          Today, Bloogigy serves as a home for writers who value quality over quantity, and readers
           who appreciate the art of long-form content in an age of bite-sized media. It is, above all, a
           reminder that some things are worth reading slowly.
         </p>

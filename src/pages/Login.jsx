@@ -32,7 +32,7 @@ export default function Login({ onSwitchToRegister }) {
     <div className="auth-page">
       <div className="auth-card">
         <h1 className="auth-card__title">Sign In</h1>
-        <p className="auth-card__subtitle">Welcome back to Blogify.</p>
+        <p className="auth-card__subtitle">Welcome back to Bloogigy.</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           {error && (
