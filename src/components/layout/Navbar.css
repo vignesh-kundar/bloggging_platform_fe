@@ -111,7 +111,7 @@
 }
 
 .nav-link--active {
-  color: var(--ink-navy-container);
+  color: var(--ink-navy);
   font-weight: 600;
   background: var(--paper-container);
 }
@@ -196,7 +196,7 @@
   padding: 6px 14px;
   border-radius: var(--radius-md);
   border: 0.5px solid var(--ink-border-light);
-  color: var(--ink-navy-container);
+  color: var(--ink-navy);
   transition: all var(--transition);
 }
 
@@ -272,10 +272,10 @@
 }
 
 .user-dropdown__item--danger {
-  color: var(--oxblood-container);
+  color: var(--oxblood);
 }
 
 .user-dropdown__item--danger:hover {
   background: var(--error-container);
-  color: var(--oxblood);
+  color: var(--error);
 }
